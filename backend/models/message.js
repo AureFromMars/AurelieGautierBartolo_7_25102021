@@ -1,29 +1,30 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Sequelize, Model, DataTypes } = require('sequelize');
+const db = require('.');
 module.exports = (sequelize, DataTypes) => {
-  class Messages extends Model {
+  class Message extends Model {
     static associate(models) {
-      // define association here ###########################################################
+      // this.myAssociation = this.belongsTo(models.User);
     }
   };
-  Messages.init(
+  Message.init(
     {
       id: {
         type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,// ???????????????????????????????????? Sequelize not reconized
+        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         unique: true,
         primaryKey: true
       },
-      user_id: {// Foreign Key
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: Users,// This is a reference to another model 
-          key: 'id'// This is the column name of the referenced model
-        },
-        comment: 'This is the foreign key form Users table'
-      },
+      // userId: {// Foreign Key
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: db.users,// This is a reference to another model 
+      //     key: 'id'// This is the column name of the referenced model
+      //   },
+      //   comment: 'This is the foreign key form User table'
+      // },
       title: {
         type: DataTypes.STRING,
         allowNull: false
@@ -33,25 +34,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       imgUrl: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING
       },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      comments: {
-        type: DataTypes.TEXT,
-      },
-      likes: {
+      // comments: {
+      //   type: DataTypes.TEXT,
+      // },
+      liking: {
         type: DataTypes.INTEGER,
         default: 0
       },
-      dislikes: {
-        type: DataTypes.INTEGER,
-        default: 0
-      },
-      userLiked: {
+      // dislikes: {
+      //   type: DataTypes.INTEGER,
+      //   default: 0
+      // },
+      userLiking: {
         type: DataTypes.INTEGER,// +1 -1 0
         default: 0,
       }
@@ -61,5 +57,5 @@ module.exports = (sequelize, DataTypes) => {
     // modelName: 'Messages'
     }
   );
-  return Messages;
+  return Message;
 };

@@ -101,27 +101,20 @@ sequelize model:create --name Groupomania --attributes "name:string, text:text, 
 - jsonwebtoken pour créer des tokens d'authentification : npm install jsonwebtoken
 
 
-
-# BDD
-
-- Télécharger MySQL Workbench pour designer facilement la BDD
-
 ## POSTMAN
 - Télécharger POSTMAN
 - Envoyer une requête en JSON : Body > raw > choisir JSON au lieu de text
 
-
-
-
-
+# BDD
+- Télécharger MySQL Workbench pour designer facilement la BDD
 
 mysql -u root -proot
 USE dbdev;
 SHOW TABLES;
 SHOW COLUMNS FROM user;
-SELECT * FROM users;
+SELECT * FROM User;
 SELECT email FROM users WHERE email ='email@email.com';
 
-DROP TABLE user; // Pour supprimer définitivement la table user
+DROP TABLE Users; // Pour supprimer définitivement la table user
 
 MANQUE UNIQUE VALIDATOR pour l'email

@@ -1,5 +1,5 @@
 // Import
-const emailValidator = require("email-validator");
+const emailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
 
 const passwordSchema = new passwordValidator();

@@ -1,9 +1,6 @@
 // Imports
 const express = require('express');// Express frameword that allow to build web apps with Node.js
 const Sequelize = require('sequelize');
-
-
-
 const morgan = require('morgan');// Morgan to have logs about HTTP middleware requests
 const userRouter = require('./routes/user');// Registration route
 const messageRouter = require('./routes/message');// Registration route
@@ -14,26 +11,12 @@ const mysql = require('mysql2');// get the client
 /*** Use middlewares and apps config */
 const app = express();// bodyParser included since Express 4.16.0 and called with further : "app.use(express"
 
-
 /*************** DB ***************/
 const db = require("./models");
 db.sequelize.sync();
-
-// Session Setup that allows to follow NODE_ENV NOOOOOOOOOOOOOOOOOOOON, pas cookies mais mysql storage
-// const sess = {
-// 	secret: process.env.SESSION_SECRET,// It holds the secret key for session
-// 	cookie: { maxAge: 3600000 * 24 },
-// 	resave: true,// Forces the session to be saved
-// 	saveUninitialized: true // Forces a session that is "uninitialized" to be saved to the store
-// };
-// if (app.get('env') === 'production') {
-//     // app.set('trust proxy', 1) // trust first proxy // Uncomment if proxy used in server
-//     sess.cookie.secure = true // serve secure cookies
-// };
-// app.use(session(sess))// DEPRECATED ????????????????????????????????????????????????????????
-
-
-
+// db.sequelize.sync({alter: true}).then(() => {
+//   console.log("Drop and re-sync db.");
+// });
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -44,15 +27,8 @@ let corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
 app.use(express.json());// parse application/json
 app.use(express.urlencoded({ extended: true }));// parse requests of content-type - application/x-www-form-urlencoded
-
-
-
-
-
-
 
 // Set the file path for the HTML file ####################################################################################################
 const htmlPath = path.join(__dirname + "../frontend/index.html");

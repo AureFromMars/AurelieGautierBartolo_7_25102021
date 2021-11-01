@@ -3,7 +3,7 @@
 
 // module.exports = (sequelize, Sequelize) => {
 
-//   const User = sequelize.define('users', {
+//   const User = sequelize.define('User', {
 //     id: {
 //       type: DataTypes.UUID,
 //       defaultValue: Sequelize.UUIDV4,
@@ -13,19 +13,21 @@
 //     },
 //     email: {
 //       type: DataTypes.TEXT,
+//       unique: true,
 //       allowNull: false
 //     },
 //     username: {
 //       type: DataTypes.STRING,
-//       // allowNull: false
+//       unique: true,
+//       allowNull: false
 //     },
 //     password: {
 //       type: DataTypes.STRING,
-//       // allowNull: false
+//       allowNull: false
 //     },
 //     isAdmin: {
 //       type: DataTypes.BOOLEAN,
-//       // allowNull: false
+//       allowNull: false,
 //       default: false
 //     },
 //     picture: {
@@ -38,18 +40,13 @@
 //   return User;
 // };
 
-
 'use strict';
-// const { Model } = require('sequelize');
 const { Sequelize, Model, DataTypes } = require('sequelize');
-// const sequelize = new Sequelize('mysql::memory:');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {
-      // define association here ###########################################################
-    }
+    static associate(models) {}// define association here ###
   };
-  User.init(
+  User.init(// require() then model.init() is an alternate of sequelize/import(path)
     {
       id: {
         type: DataTypes.UUID,
@@ -59,27 +56,13 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true
       },
       email: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
-        validate: {
-          isUnique: function (value, next) {
-            const self = this;
-            User.find({where: {email: value}})
-            .then(function (user) {
-              // reject if a different user wants to use the same email
-              if (user && self.id !== user.id) {
-                return next('Email already in use!');
-              }
-              return next();
-            })
-            .catch(function (err) { return next(err);
-            });
-          }
-        }
+        allowNull: false
       },
       username: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false
       },
       password: {
@@ -98,12 +81,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
       }
     },
-    // { indexes:
-    //   [{
-    //   unique: true,
-    //   fields: ['email']
-    //   }]
-    // },
     {
     sequelize
     // modelName: 'User'

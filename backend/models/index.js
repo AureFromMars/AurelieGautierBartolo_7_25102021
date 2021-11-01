@@ -24,12 +24,39 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USERNAME, dbConfig.PASSWOR
     freezeTableName: true// Force table name to be equal to model name// Can also be defined locally, on the specific model
   }
 });
+
 const db = {};
+
+db.users = require("./user")(sequelize, Sequelize);
+db.messages = require("./message")(sequelize, Sequelize);
+// db.comments = require("./comment")(sequelize, Sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.users = require("./user")(sequelize, Sequelize);
+
+
+// const UserModel = require('./user');
+// const MessageModel = require('./message');
+// const CommentModel = require('./comment');
+
+// const models = {
+//   User: UserModel.init(sequelize, Sequelize),
+//   Message: MessageModel.init(sequelize, Sequelize),
+//   Comment: CommentModel.init(sequelize, Sequelize),
+// };
+
+// Object.values(models)// Create relationships in the ORM
+//   .filter(model => typeof model.associate === 'function')
+//   .forEach(model => model.associate(models));
+
+// const db = {
+//   ...models,
+//   sequelize,
+// };
+
+
+
 
 // fs
 //   .readdirSync(__dirname)// Allows to recuperer fichiers presents dans dossier models et recuperer les fichiers qui ne commencent pas par un point puis recup ceux hors index.js, puis prends tous les fichiers.js
@@ -46,28 +73,6 @@ db.users = require("./user")(sequelize, Sequelize);
 //   if (db[modelName].associate) {
 //     db[modelName].associate(db);
 //   }
-// });
-
-
-
-
-// Connexion
-// sequelize.authenticate()
-// .then(() => {
-//   console.log('Connection established successfully.');
-
-//   // Sync if needed
-//   // db.sequelize.sync();// To uncomment after development ######################################################################
-//   db.sequelize.sync({ alter: true })
-//   .then(() => {// Development use to drop existing tables and re-sync database
-//     console.log("Drop and re-sync db.");
-//   })
-//   .catch(err => {
-//     console.error(err);
-//   });
-// })
-// .catch(err => {
-//   console.error('Unable to connect to the database:', err);
 // });
 
 // Export
