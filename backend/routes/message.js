@@ -10,7 +10,6 @@ messageRouter.get('/all/', messageCtrl.getAllMessages);
 messageRouter.get('/one/:id', messageCtrl.getOneMessage);
 messageRouter.put('/modify/:id', messageCtrl.modifyMessage);
 messageRouter.delete('/delete/:id', messageCtrl.deleteMessage);
-messageRouter.post('/liking/:id', messageCtrl.likingMessage);
 
 // EXPORT router module
 module.exports = messageRouter;

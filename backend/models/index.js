@@ -29,34 +29,11 @@ const db = {};
 
 db.users = require("./user")(sequelize, Sequelize);
 db.messages = require("./message")(sequelize, Sequelize);
-// db.comments = require("./comment")(sequelize, Sequelize);
+db.comments = require("./comment")(sequelize, Sequelize);
+db.liking = require("./liking")(sequelize, Sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-
-
-// const UserModel = require('./user');
-// const MessageModel = require('./message');
-// const CommentModel = require('./comment');
-
-// const models = {
-//   User: UserModel.init(sequelize, Sequelize),
-//   Message: MessageModel.init(sequelize, Sequelize),
-//   Comment: CommentModel.init(sequelize, Sequelize),
-// };
-
-// Object.values(models)// Create relationships in the ORM
-//   .filter(model => typeof model.associate === 'function')
-//   .forEach(model => model.associate(models));
-
-// const db = {
-//   ...models,
-//   sequelize,
-// };
-
-
-
 
 // fs
 //   .readdirSync(__dirname)// Allows to recuperer fichiers presents dans dossier models et recuperer les fichiers qui ne commencent pas par un point puis recup ceux hors index.js, puis prends tous les fichiers.js

@@ -4,6 +4,8 @@ const Sequelize = require('sequelize');
 const morgan = require('morgan');// Morgan to have logs about HTTP middleware requests
 const userRouter = require('./routes/user');// Registration route
 const messageRouter = require('./routes/message');// Registration route
+const commentRouter = require('./routes/comment');// Registration route
+const likingRouter = require('./routes/liking');// Registration route
 const path = require('path');// Path Node module to have path from images
 const cors = require('cors');// Cors to avoid declare headers
 const mysql = require('mysql2');// get the client
@@ -36,6 +38,8 @@ const htmlPath = path.join(__dirname + "../frontend/index.html");
 /*************** Set simple routes ***************/
 app.use('/api/user', userRouter);// Create authentification route
 app.use('/api/message', messageRouter);// Create authentification route
+app.use('/api/message/comment', commentRouter);// Create authentification route
+app.use('/api/message/liking', likingRouter);// Create authentification route
 
 // const testGet = (req, res, next) => {
 // 	res.status(200).json({ message: "C'est moi qui te guette !"})

@@ -2,9 +2,51 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const db = require('.');
 module.exports = (sequelize, DataTypes) => {
+  // class Message extends Model {
+  //   static associate(models) {
+  //     this.messageBelongsToUser = this.belongsTo(models.User, {
+  //       onDelete: "CASCADE",
+  //       foreignKey: {
+  //         allowNull: false
+  //       }
+  //     });
+  //     this.messageHasManyComment = this.hasMany(models.Comment, {
+  //       onDelete: "CASCADE",
+  //       foreignKey: {
+  //         allowNull: false
+  //       }
+  //     });
+  //     this.messageHasManyLiking = this.hasMany(models.Liking, {
+  //       onDelete: "CASCADE",
+  //       foreignKey: {
+  //         allowNull: false
+  //       }
+  //     });
+  //   }
+  // };
   class Message extends Model {
     static associate(models) {
-      // this.myAssociation = this.belongsTo(models.User);
+      this.belongsTo(models.User, {
+        onDelete: "CASCADE",
+        foreignKey: {
+          name: 'userId',
+          allowNull: false
+        }
+      });
+      this.hasMany(models.Comment, {
+        onDelete: "CASCADE",
+        foreignKey: {
+          name: 'commentId',
+          allowNull: true
+        }
+      });
+      this.hasMany(models.Liking, {
+        onDelete: "CASCADE",
+        foreignKey: {
+          name: 'likingId',
+          allowNull: true
+        }
+      });
     }
   };
   Message.init(
@@ -35,21 +77,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       imgUrl: {
         type: DataTypes.STRING
-      },
-      // comments: {
-      //   type: DataTypes.TEXT,
-      // },
-      liking: {
-        type: DataTypes.INTEGER,
-        default: 0
-      },
-      // dislikes: {
-      //   type: DataTypes.INTEGER,
-      //   default: 0
-      // },
-      userLiking: {
-        type: DataTypes.INTEGER,// +1 -1 0
-        default: 0,
       }
     },
     {
