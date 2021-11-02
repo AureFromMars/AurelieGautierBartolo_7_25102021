@@ -41,10 +41,5 @@ app.use('/api/message', messageRouter);// Create authentification route
 app.use('/api/message/comment', commentRouter);// Create authentification route
 app.use('/api/message/liking', likingRouter);// Create authentification route
 
-// const testGet = (req, res, next) => {
-// 	res.status(200).json({ message: "C'est moi qui te guette !"})
-// };
-// app.get('/api/', testGet);
-
 // EXPORT app module
 module.exports = app;

@@ -7,6 +7,38 @@ const fs = require('fs');// File system Node module to manager files
 // CRUD Controllers = CREATE, READ, UPDATE, DELETE // Controllers for messages
 
 exports.createMessage = (req, res, next) => {
+
+  if (req.file) {
+    const messageObject = {
+      ...JSON.parse(req.body.message),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/messages/${req.file.filename}`
+    }
+    .then((hash) => {
+      delete messageObject.id;
+      User.create({// Either .built then .save || .create // .save doesn't store images
+        ...messageObject,
+        email: encryptEmail,
+        password: hash
+      })
+      .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
+    })
+    // .catch(error => res.status(454).json({ error }));// Recode the number #################################################
+  } else {
+    bcrypt.hash(req.body.password, saltRounds)
+    .then((hash) => {
+      delete req.body.id;
+      User.create({
+        ...req.body,
+        email: encryptEmail,
+        password: hash
+      })
+      .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
+    })
+    // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
+  }
+
+
+
   // const messageObject = JSON.parse(req.body.message);
   // delete messageObject._id;
   // const message = Message.create({
@@ -32,6 +64,11 @@ exports.getOneMessage = (req, res, next) => {
 };
 
 exports.modifyMessage = (req, res, next) => {
+
+// Récupérer message, puis l'utilisateur à l'intérieur
+
+
+
 	Message.findOne({where : { id: req.params.id}})
 	.then(Message => {
 		Message.update({...req.body})

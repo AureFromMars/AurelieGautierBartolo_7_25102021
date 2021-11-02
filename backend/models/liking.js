@@ -4,8 +4,20 @@ const db = require('.');
 module.exports = (sequelize, DataTypes) => {
   class Liking extends Model {
     static associate(models) {
-      this.likingBelongsToMessage = this.belongsTo(models.Message);
-      this.likingBelongsToUser = this.belongsTo(models.User);
+      this.likingBelongsToMessage = this.belongsTo(models.Message, {
+        onDelete: 'CASCADE',
+        foreignKey: {
+          name: 'messageId',
+          allowNull: false
+        }
+      });
+      this.likingBelongsToUser = this.belongsTo(models.User, {
+        onDelete: 'CASCADE',
+        foreignKey: {
+          name: 'userId',
+          allowNull: false
+        }
+      });
     }
   };
   Liking.init(
@@ -17,24 +29,6 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         primaryKey: true
       },
-      // messageId: {// Foreign Key
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: db.messages,// This is a reference to another model 
-      //     key: 'id'// This is the column name of the referenced model
-      //   },
-      //   comment: 'This is the foreign key from Message table'
-      // },
-      // userId: {// Foreign Key
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: db.users,// This is a reference to another model 
-      //     key: 'id'// This is the column name of the referenced model
-      //   },
-      //   comment: 'This is the foreign key from User table'
-      // },
       value: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -43,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
     sequelize
-    // modelName: 'Messages'
     }
   );
   return Liking;

@@ -99,6 +99,7 @@ sequelize model:create --name Groupomania --attributes "name:string, text:text, 
 - npm install email-validator ################################################
 - password-validator pour obliger à créer un mot de passe fort : npm install password-validator
 - jsonwebtoken pour créer des tokens d'authentification : npm install jsonwebtoken
+- npm install multer ################################################
 
 
 ## POSTMAN
@@ -111,10 +112,11 @@ sequelize model:create --name Groupomania --attributes "name:string, text:text, 
 mysql -u root -proot
 USE dbdev;
 SHOW TABLES;
-SHOW COLUMNS FROM user;
+SHOW COLUMNS FROM User;
+SHOW COLUMNS FROM Message;
 SELECT * FROM User;
+SELECT * FROM Message;
+
 SELECT email FROM users WHERE email ='email@email.com';
 
-DROP TABLE Users; // Pour supprimer définitivement la table user
-
-MANQUE UNIQUE VALIDATOR pour l'email
+DROP TABLE User; // Pour supprimer définitivement la table user
