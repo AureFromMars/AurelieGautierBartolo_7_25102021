@@ -7,7 +7,7 @@ const token = require('../middleware/token');
 const uploadImage = require('../middleware/uploadUserImage');
 
 // CRUD ENDPOINT = CREATE, READ, UPDATE, DELETE // Routes for users
-userRouter.post('/register', userValidator.emailValidator, userValidator.passwordValidator, userValidator.usernameValidator, uploadImage.single('file'), userCtrl.register);
+userRouter.post('/register', uploadImage.single('file'), userValidator.emailValidator, userValidator.passwordValidator, userValidator.usernameValidator, userCtrl.register);
 userRouter.post('/login', userCtrl.login);
 userRouter.get('/all', token, userCtrl.getAllUsers);
 userRouter.get('/one/:id', token, userCtrl.getOneUser);

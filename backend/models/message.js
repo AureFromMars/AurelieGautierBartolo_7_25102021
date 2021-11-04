@@ -14,14 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       this.messageHasManyComments = this.hasMany(models.Comment, {
         onDelete: 'CASCADE',
         foreignKey: {
-          name: 'commentId',
+          name: 'messageId',
           allowNull: true
         }
       });
       this.messageHasManyLiking = this.hasMany(models.Liking, {
         onDelete: 'CASCADE',
         foreignKey: {
-          name: 'likingId',
+          name: 'messageId',
           allowNull: true
         }
       });

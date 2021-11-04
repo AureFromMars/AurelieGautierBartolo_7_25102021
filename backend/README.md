@@ -119,4 +119,8 @@ SELECT * FROM Message;
 
 SELECT email FROM users WHERE email ='email@email.com';
 
-DROP TABLE User; // Pour supprimer définitivement la table user
+// Pour supprimer définitivement la table user
+DROP TABLE Liking;
+DROP TABLE Comment;
+DROP TABLE Message;
+DROP TABLE User; 

@@ -6,21 +6,21 @@ module.exports = (sequelize, DataTypes) => {
       this.userHasManyMessages = this.hasMany(models.Message, {
         onDelete: 'CASCADE',//The defaults for the One-To-One associations is SET NULL for ON DELETE and CASCADE for ON UPDATE.
         foreignKey: {
-          name: 'messageId',
+          name: 'userId',
           allowNull: true
         }
       });
       this.userHasManyComments = this.hasMany(models.Comment, {
         onDelete: 'CASCADE',
         foreignKey: {
-          name: 'commentId',
+          name: 'userId',
           allowNull: true
         }
       });
       this.userHasManyLiking = this.hasMany(models.Liking, {
         onDelete: 'CASCADE',
         foreignKey: {
-          name: 'likingId',
+          name: 'userId',
           allowNull: true
         }
       });
