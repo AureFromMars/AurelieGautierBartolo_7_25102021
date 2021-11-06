@@ -223,4 +223,4 @@ SELECT email FROM users WHERE email ='email@email.com';
 DROP TABLE Liking;
 DROP TABLE Comment;
 DROP TABLE Message;
-DROP TABLE User; 
+DROP TABLE User;

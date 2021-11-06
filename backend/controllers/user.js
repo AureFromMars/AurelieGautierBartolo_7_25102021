@@ -49,26 +49,6 @@ exports.register = (req, res, next) => {// For further cases IRL : create a spec
     })
     // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
   }
-
-  // const encryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
-
-  // let imageUrl= '';
-  // if (req.file) {
-  //   imageUrl = `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`;
-  // }
-  //   bcrypt.hash(req.body.password, saltRounds)
-  //   .then((hash) => {
-  //     delete req.body.id;
-  //     User.create({
-  //       ...req.body,
-  //       email: encryptEmail,
-  //       password: hash,
-  //       imageUrl: imageUrl
-  //     })
-  //     .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
-  //   })
-  
-    // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
 };
 
 // Login authentification
@@ -89,7 +69,7 @@ exports.login = (req, res, next) => {
 				res.status(200).json({
 					userId: user.id,
 					token: jwt.sign(
-						{ userId: user.id }, 'RANDOM_TOKEN_SECRET', { expiresIn: '2h' }// VARIABLE D'ENV ###########################
+						{ userId: user.id }, process.env.TOKEN_SECRET.toString(), { expiresIn: '2h' }// VARIABLE D'ENV ###########################
 					),
 					message: "Utilisateur connecté !"
 				})
@@ -102,13 +82,7 @@ exports.login = (req, res, next) => {
 };
 
 exports.getAllUsers = (req, res, next) => {
-	User.findAll({
-    // include: [
-    //   { model: Message},
-    //   { model: Comment},
-    //   { model: Liking}
-    // ]
-  })
+	User.findAll()
 	.then((messages) => res.status(200).json(messages))
 	.catch(error => res.status(400).json({ error }));
 };
@@ -176,10 +150,7 @@ exports.deleteUser = (req, res, next) => {
   User.findOne({where : { id: req.params.id}})
   .then(user => {
     if (user.imageUrl == null || user.imageUrl == "") {
-      User.destroy({
-        where: { id: req.params.id },
-        include: [Liking]
-      })
+      User.destroy({ where: { id: req.params.id } })
       .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
     } else {
       const filename = user.imageUrl.split('/images/users/')[1];
@@ -191,41 +162,3 @@ exports.deleteUser = (req, res, next) => {
     }
   })
 };
-
-// exports.deleteUser = (req, res, next) => {
-//   User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
-//   .then((user) => {
-//     if (user.isAdmin || (user.id === req.params.userId)) {// If same userId because rights allows to proprior
-//       const userObject = req.file ? {
-//         ...JSON.parse(req.body.user),
-//         imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
-//       } : { ...req.body };
-//       if (req.file) {
-//         User.findOne({where : { id: req.params.id}})
-//         .then(user => {
-//           const filename = user.imageUrl.split('/images/users/')[1];
-//           fs.unlink('images/users/' + filename, () => {
-//             User.destroy(userObject, {
-//               where: { id: req.params.id, imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}` },
-//               include: [Message, Comment, Liking]// INCLUDE at least Liking ????????????????????????????????????????
-//             })
-//             .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
-//             // .catch(error => res.status(400).json({ error }));
-//           });
-//         })
-//         // .catch(error => res.status(400).json({ error }));
-//       } else {
-//         User.destroy(userObject, {
-//           where: { id: req.params.id },
-//           include: [Message, Comment, Liking]// INCLUDE at least Liking ????????????????????????????????????????
-//         })
-//         .then(() => res.status(200).json({ message: "Utilisateur supprimé !"}))
-//         // .catch(error => res.status(400).json({ error }));
-//       };
-//     } else {
-//       res.status(403).json({ error })
-//       // .catch(error => res.status(400).json({ error }));
-//     };
-//   })
-//   // .catch(error => res.status(512).json({ error }));
-// };

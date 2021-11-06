@@ -7,40 +7,47 @@ const Liking = db.Liking;// Liking model
 
 exports.addLiking = (req, res, next) => {
   delete req.body.id;
-  Liking.create({ ...req.body })
-  .then(() => res.status(201).json({ message: "Like/Dislike enregistré !"}))// Callback that returns the promise
-  // .catch(error => res.status(400).json({ error }));// Callback error
+  if (req.body.value != -1 && req.body.value != 0 && req.body.value != 1) {
+    res.status(401).json({ message: "Les seules valeurs acceptées sont : -1, 0 et 1 !"});
+    return ;
+  };
+  Liking.create({
+    ...req.body,
+    userId: req.token.userId
+  })
+  .then(() => res.status(201).json({ message: "Like/Dislike enregistré !"}))
+  .catch(error => res.status(400).json({ error }));
 };
 
-exports.getAllLiking = (req, res, next) => {
+exports.getAllLikingFromUser = (req, res, next) => {
   Liking.findAll({
+    where: {userId: req.body.userId},
     include: [
       { model: User},
       { model: Message}
     ]
   })
-  .then(() => res.status(201).json({ message: "Voici tous les Like/Dislike !"}))// Callback that returns the promise
-  // .catch(error => res.status(400).json({ error }));// Callback error
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(444).json({ error }));
 };
 
 exports.getOneLiking = (req, res, next) => {
   Liking.findOne({ 
-    attributes: ['id', 'content'],// USEFULL ?????????????????????????????????????????????????? Voir User et Message du coup
     where : { id: req.params.id},
     include: [
-      { model: Message},
-      { model: Liking}
+      { model: User},
+      { model: Message}
     ]
   })
-  .then(() => res.status(201).json({ message: "Voici le Like/Dislike demandé !"}))// Callback that returns the promise
-  // .catch(error => res.status(404).json({ error }));// Callback error
+  .then(() => res.status(201).json({ message: "Voici le Like/Dislike demandé !"}))
+  .catch(error => res.status(404).json({ error }));
 };
 
 exports.modifyLiking = (req, res, next) => {
   if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
-      if (!user.isAdmin) {// If I am not Admin => go fuck
+      if (!user.isAdmin) {// If I am not Admin => no access
         res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce Like/Dislike."});
         return ;
       };
@@ -48,9 +55,9 @@ exports.modifyLiking = (req, res, next) => {
   };
 	Liking.findOne({ where : { id: req.params.id} })
 	.then(liking => {
-		Liking.update(...req.body,{ where: { id: req.params.id } })
+		Liking.update(req.body,{ where: { id: req.params.id } })
 		.then(() => res.status(201).json({ message: "Like/Dislike modifié !"}))
-		// .catch(error => res.status(470).json({ error }));
+		.catch(error => res.status(470).json({ error }));
 	})
 };
 
@@ -58,16 +65,16 @@ exports.deleteLiking = (req, res, next) => {
   if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
-      if (!user.isAdmin) {// If I am not Admin => go fuck
+      if (!user.isAdmin) {// If I am not Admin => no access
         res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce Like/Dislike."});
         return ;
       };
     })
   };
 	Liking.findOne({ where : { id: req.params.id} })
-  .then(liking => {
-    Liking.destroy({where : { id: req.params.id }})// include ????????????????????????????????????????????????
+  .then(() => {
+    Liking.destroy({where : { id: req.params.id }})
     .then(() => res.status(201).json({ message: "Like/Dislike supprimé !"}))
-    // .catch(error => res.status(410).json({ error }));    
+    .catch(error => res.status(410).json({ error }));    
   })
 };

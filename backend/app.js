@@ -17,7 +17,7 @@ const app = express();// bodyParser included since Express 4.16.0 and called wit
 // https://devstory.net/11959/connectez-vous-a-la-base-de-donnees-mysql-dans-nodejs
 
 /*************** DB ***************/
-// const db = require("./models");
+const db = require("./models");
 // db.sequelize.sync({alter: true, force: true}).then(() => {
 //   console.log("Drop and re-sync db.");
 // });

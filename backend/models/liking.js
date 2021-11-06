@@ -22,13 +22,6 @@ module.exports = (sequelize, DataTypes) => {
   };
   Liking.init(
     {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
-        unique: true,
-        primaryKey: true
-      },
       value: {
         type: DataTypes.INTEGER,
         allowNull: false,

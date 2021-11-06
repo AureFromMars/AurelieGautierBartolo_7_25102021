@@ -4,8 +4,8 @@
   "description": "",
   "main": "backend/server.js",
   "scripts": {
-    "start": "cd backend && nodemon server.js",
-    "startall": "cd backend && nodemon server.js & cd frontend && npm run serve",
+    "start": "cd backend && nodemon server.js & cd frontend && npm run serve",
+    "back": "cd backend && nodemon server.js",
     "front": "cd frontend && npm run serve"
   },
   "author": "",

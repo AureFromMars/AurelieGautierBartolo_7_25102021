@@ -11,49 +11,49 @@ exports.createComment = (req, res, next) => {
     ...req.body,
     userId: req.token.userId
   })
-  .then(() => res.status(201).json({ message: "Commentaire enregistré !"}))// Callback that returns the promise
-  // .catch(error => res.status(400).json({ error }));// Callback error
+  .then(() => res.status(201).json({ message: "Commentaire enregistré !"}))
+  .catch(error => res.status(400).json({ error }));
 };
 
-exports.getAllComments = (req, res, next) => {
+exports.getAllCommentsFromMessage = (req, res, next) => {
   Comment.findAll({
+    where: {messageId: req.body.messageId},
     include: [
       { model: User},
       { model: Message}
     ]
   })
-  then(() => res.status(201).json({ message: "Voici tous les commentaires !"}))// Callback that returns the promise
-  // .catch(error => res.status(400).json({ error }));// Callback error
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(400).json({ error }));
 };
 
 exports.getOneComment = (req, res, next) => {
   Comment.findOne({
-    attributes: ['id', 'content'],// USEFULL ?????????????????????????????????????????????????? Voir User et Message du coup
     where : { id: req.params.id},
     include: [
-      { model: Message},
-      { model: Comment}
+      { model: User},
+      { model: Message}
     ]
   })
-  .then((message) => res.status(401).json({ message: "Voici le commentaire demandé !"}))// Callback that returns the promise
-  // .catch(error => res.status(404).json({ error }));// Callback error
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(404).json({ error }));
 };
 
 exports.modifyComment = (req, res, next) => {
   if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
-      if (!user.isAdmin) {// If I am not Admin => go fuck
+      if (!user.isAdmin) {// If I am not Admin => no access
         res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce commentaire."});
         return ;
       };
     })
   };
 	Comment.findOne({ where : { id: req.params.id} })
-	.then(comment => {
-		Comment.update(...req.body,{ where: { id: req.params.id } })
+	.then(() => {
+		Comment.update(req.body,{ where: { id: req.params.id } })
 		.then(() => res.status(201).json({ message: "Commentaire modifié !"}))
-		// .catch(error => res.status(470).json({ error }));
+		.catch(error => res.status(470).json({ error }));
 	})
 };
 
@@ -61,16 +61,16 @@ exports.deleteComment = (req, res, next) => {
   if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
-      if (!user.isAdmin) {// If I am not Admin => go fuck
+      if (!user.isAdmin) {// If I am not Admin => no access
         res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce commentaire."});
         return ;
       };
     })
   };
 	Comment.findOne({ where : { id: req.params.id} })
-  .then(comment => {
-    Comment.destroy({where : { id: req.params.id }})// include ????????????????????????????????????????????????
+  .then(() => {
+    Comment.destroy({where : { id: req.params.id }})
     .then(() => res.status(201).json({ message: "Commentaire supprimé !"}))
-    // .catch(error => res.status(410).json({ error }));    
+    .catch(error => res.status(410).json({ error }));
   })
 };
