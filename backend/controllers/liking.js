@@ -15,8 +15,8 @@ exports.addLiking = (req, res, next) => {
 exports.getAllLiking = (req, res, next) => {
   Liking.findAll({
     include: [
-      { model: User, attributes: ['id'] },
-      { model: Message, attributes: ['id'] }
+      { model: User},
+      { model: Message}
     ]
   })
   .then(() => res.status(201).json({ message: "Voici tous les Like/Dislike !"}))// Callback that returns the promise
@@ -28,8 +28,8 @@ exports.getOneLiking = (req, res, next) => {
     attributes: ['id', 'content'],// USEFULL ?????????????????????????????????????????????????? Voir User et Message du coup
     where : { id: req.params.id},
     include: [
-      { model: Message, attributes: ['id'] },
-      { model: Liking, attributes: ['id'] }
+      { model: Message},
+      { model: Liking}
     ]
   })
   .then(() => res.status(201).json({ message: "Voici le Like/Dislike demandé !"}))// Callback that returns the promise

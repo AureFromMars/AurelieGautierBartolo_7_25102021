@@ -28,13 +28,13 @@ module.exports = (sequelize, DataTypes) => {
   };
   User.init(// .require then model.init is an alternate of sequelize/import(path)
     {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
-        unique: true,
-        primaryKey: true
-      },
+      // id: {
+      //   type: DataTypes.UUID,
+      //   defaultValue: Sequelize.UUIDV4,
+      //   allowNull: false,
+      //   unique: true,
+      //   primaryKey: true
+      // },
       email: {
         type: DataTypes.STRING,
         unique: true,

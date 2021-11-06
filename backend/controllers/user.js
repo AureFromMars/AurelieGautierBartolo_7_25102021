@@ -18,57 +18,57 @@ const token = require('../middlewares/token');// SUPP ##########################
 const fs = require('fs');// File system Node module to manager files
 
 exports.register = (req, res, next) => {// For further cases IRL : create a specific route to uploads images because multer allows to upload even if User ins't valid
+  if (req.file) {
+    const userObject = {
+      ...JSON.parse(req.body.user),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
+    };
+    const encryptEmail = cryptoJs.HmacSHA256(userObject.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
+    bcrypt.hash(userObject.password, saltRounds)// Hashing password to encrypt with SHA 512 Bit... allows to compare 2 files that should be the same if not corrupted, but never decrypted
+    .then((hash) => {
+      delete userObject.id;
+      User.create({// Either .built then .save || .create // .save doesn't store images
+        ...userObject,
+        email: encryptEmail,
+        password: hash
+      })
+      .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
+    })
+    // .catch(error => res.status(454).json({ error }));// Recode the number #################################################
+  } else {
     const encryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
-  
-    if (req.file) {
-      const userObject = {
-        ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
-      }
-      bcrypt.hash(userObject.password, saltRounds)// Hashing password to encrypt with SHA 512 Bit... allows to compare 2 files that should be the same if not corrupted, but never decrypted
-      .then((hash) => {
-        delete userObject.id;
-        User.create({// Either .built then .save || .create // .save doesn't store images
-          ...userObject,
-          email: encryptEmail,
-          password: hash
-        })
-        .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
+    bcrypt.hash(req.body.password, saltRounds)
+    .then((hash) => {
+      delete req.body.id;
+      User.create({
+        ...req.body,
+        email: encryptEmail,
+        password: hash
       })
-      // .catch(error => res.status(454).json({ error }));// Recode the number #################################################
-    } else {
-      bcrypt.hash(req.body.password, saltRounds)
-      .then((hash) => {
-        delete req.body.id;
-        User.create({
-          ...req.body,
-          email: encryptEmail,
-          password: hash
-        })
-        .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
-      })
-      // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
-    }
+      .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
+    })
+    // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
+  }
 
-    // const encryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
+  // const encryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
+
+  // let imageUrl= '';
+  // if (req.file) {
+  //   imageUrl = `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`;
+  // }
+  //   bcrypt.hash(req.body.password, saltRounds)
+  //   .then((hash) => {
+  //     delete req.body.id;
+  //     User.create({
+  //       ...req.body,
+  //       email: encryptEmail,
+  //       password: hash,
+  //       imageUrl: imageUrl
+  //     })
+  //     .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
+  //   })
   
-    // let imageUrl= '';
-    // if (req.file) {
-    //   imageUrl = `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`;
-    // }
-    //   bcrypt.hash(req.body.password, saltRounds)
-    //   .then((hash) => {
-    //     delete req.body.id;
-    //     User.create({
-    //       ...req.body,
-    //       email: encryptEmail,
-    //       password: hash,
-    //       imageUrl: imageUrl
-    //     })
-    //     .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
-    //   })
-    
-      // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
+    // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
 };
 
 // Login authentification
@@ -103,11 +103,11 @@ exports.login = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
 	User.findAll({
-    include: [
-      { model: Message, attributes: ['id'] },
-      { model: Comment, attributes: ['id'] },
-      { model: Liking, attributes: ['id'] }
-    ]
+    // include: [
+    //   { model: Message},
+    //   { model: Comment},
+    //   { model: Liking}
+    // ]
   })
 	.then((messages) => res.status(200).json(messages))
 	.catch(error => res.status(400).json({ error }));
@@ -117,9 +117,9 @@ exports.getOneUser = (req, res, next) => {
 	User.findOne({
     where : { id: req.params.id},
     include: [
-      { model: Message, attributes: ['id'] },
-      { model: Comment, attributes: ['id'] },
-      { model: Liking, attributes: ['id'] }
+      { model: Message},
+      { model: Comment},
+      { model: Liking}
     ]
   })
 	.then((messages) => res.status(200).json(messages))
@@ -139,10 +139,10 @@ exports.modifyUser = (req, res, next) => {
   User.findOne({where : { id: req.params.id}})
   .then(user => {
     if (req.file) {
-      const userObject = req.file ? {
+      const userObject = {
         ...JSON.parse(req.body.user),
         imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
-      } : { ...req.body };
+      };
       if (user.imageUrl == null || user.imageUrl == "") {
         User.update(userObject, { where: { id: req.params.id }})
         .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
@@ -156,7 +156,7 @@ exports.modifyUser = (req, res, next) => {
         });
       }
     } else {
-      User.update(...req.body, { where: { id: req.params.id }})
+      User.update(req.body, { where: { id: req.params.id }})
       .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
       // .catch(error => res.status(400).json({ error }));
     };
@@ -184,10 +184,7 @@ exports.deleteUser = (req, res, next) => {
     } else {
       const filename = user.imageUrl.split('/images/users/')[1];
       fs.unlink('images/users/' + filename, () => {
-        User.destroy({
-          where: { id: req.params.id },
-          include: [Liking]
-        })
+        User.destroy({ where: { id: req.params.id } })
         .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
         // .catch(error => res.status(400).json({ error }));
       });

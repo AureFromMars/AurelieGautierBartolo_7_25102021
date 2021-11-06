@@ -65,9 +65,9 @@ exports.createMessage = (req, res, next) => {
 exports.getAllMessages = (req, res, next) => {
   Message.findAll({
     include: [
-      { model: User, attributes: ['id'] },
-      { model: Comment, attributes: ['id'] },
-      { model: Liking, attributes: ['id'] }
+      { model: User},
+      { model: Comment},
+      { model: Liking}
     ]
   })
   .then((messages) => res.status(200).json(messages))// Callback that returns the promise
@@ -78,9 +78,9 @@ exports.getAllMessagesFromUser = (req, res, next) => {
   Message.findAll({
     where: {userId: req.token.userId},
     include: [
-      { model: User, attributes: ['id'] },
-      { model: Comment, attributes: ['id'] },
-      { model: Liking, attributes: ['id'] }
+      { model: User},
+      { model: Comment},
+      { model: Liking}
     ]
   })
   .then((messages) => res.status(200).json(messages))// Callback that returns the promise
@@ -92,9 +92,9 @@ exports.getOneMessage = (req, res, next) => {
   Message.findOne({
     where : { id: req.params.id },
     include: [
-      { model: User, attributes: ['id'] },
-      { model: Comment, attributes: ['id'] },
-      { model: Liking, attributes: ['id'] }
+      { model: User},
+      { model: Comment},
+      { model: Liking}
     ]
   })
   .then((messages) => res.status(200).json(messages))// Callback that returns the promise
@@ -154,9 +154,9 @@ exports.deleteMessage = (req, res, next) => {
       Message.destroy({
         where: { id: req.params.id },
         include: [
-          { model: User, attributes: ['id'] },// ????????????????????????????????????????
-          { model: Comment, attributes: ['id'] },
-          { model: Liking, attributes: ['id'] }
+          { model: User},// ????????????????????????????????????????
+          { model: Comment},
+          { model: Liking}
         ]
       })
       .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
@@ -166,9 +166,9 @@ exports.deleteMessage = (req, res, next) => {
         Message.destroy({
           where: { id: req.params.id },
           include: [
-            { model: User, attributes: ['id'] },// ?????????????????????????????????????
-            { model: Comment, attributes: ['id'] },
-            { model: Liking, attributes: ['id'] }
+            { model: User},// ?????????????????????????????????????
+            { model: Comment},
+            { model: Liking}
           ]
         })
         .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))

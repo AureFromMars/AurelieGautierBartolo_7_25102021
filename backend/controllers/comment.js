@@ -18,8 +18,8 @@ exports.createComment = (req, res, next) => {
 exports.getAllComments = (req, res, next) => {
   Comment.findAll({
     include: [
-      { model: User, attributes: ['id'] },
-      { model: Message, attributes: ['id'] }
+      { model: User},
+      { model: Message}
     ]
   })
   then(() => res.status(201).json({ message: "Voici tous les commentaires !"}))// Callback that returns the promise
@@ -31,8 +31,8 @@ exports.getOneComment = (req, res, next) => {
     attributes: ['id', 'content'],// USEFULL ?????????????????????????????????????????????????? Voir User et Message du coup
     where : { id: req.params.id},
     include: [
-      { model: Message, attributes: ['id'] },
-      { model: Comment, attributes: ['id'] }
+      { model: Message},
+      { model: Comment}
     ]
   })
   .then((message) => res.status(401).json({ message: "Voici le commentaire demandé !"}))// Callback that returns the promise
