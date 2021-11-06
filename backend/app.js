@@ -9,10 +9,14 @@ const likingRouter = require('./routes/liking');// Registration route
 const path = require('path');// Path Node module to have path from images
 const cors = require('cors');// Cors to avoid declare headers
 const mysql = require('mysql2');// get the client
-const Vue = require('vue');
 
 /*** Use middlewares and apps config */
 const app = express();// bodyParser included since Express 4.16.0 and called with further : "app.use(express"
+
+
+// MYSQL connect ??? ########################################################################################
+// https://devstory.net/11959/connectez-vous-a-la-base-de-donnees-mysql-dans-nodejs
+
 
 /*************** DB ***************/
 const db = require("./models");
