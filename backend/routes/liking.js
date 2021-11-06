@@ -2,7 +2,7 @@
 const express = require('express');
 const likingRouter = express.Router();
 const likingCtrl = require('../controllers/liking');
-const token = require('../middleware/token');
+const token = require('../middlewares/token');
 
 // CRUD ENDPOINT = CREATE, READ, UPDATE, DELETE // Routes for liking
 

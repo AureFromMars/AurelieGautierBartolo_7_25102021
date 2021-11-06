@@ -6,16 +6,15 @@
 // Imports
 const db = require('../models');
 const User = db.User;// User model
-const Message = db.Message;// User model
-const Comment = db.Comment;// User model
-const Liking = db.Liking;// User model
+const Message = db.Message;// Message model
+const Comment = db.Comment;// Comment model
+const Liking = db.Liking;// Liking model
 // const {User, Message, Comment, Liking} = require('../models');// Equals to lines above
-
 const bcrypt = require('bcrypt');// Bcrypt package and set salt to hash password
 const saltRounds = 10;// Allows to complexify encrypt executing 10 times the hashing algorithm
 const cryptoJs = require('crypto-js');// Crypto-js package to encrypt than decrypt email
 const jwt = require('jsonwebtoken');// jsonwebtoken package to create a token
-const token = require('../middleware/token');// SUPP ############################################################################?????????????????????????????????????????????????????
+const token = require('../middlewares/token');// SUPP ############################################################################?????????????????????????????????????????????????????
 const fs = require('fs');// File system Node module to manager files
 
 exports.register = (req, res, next) => {// For further cases IRL : create a specific route to uploads images because multer allows to upload even if User ins't valid
@@ -77,9 +76,9 @@ exports.login = (req, res, next) => {
 	const decryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();
 	User.findOne({where : { email: decryptEmail }})// Check if users exists in DB
 	.then(user => {
-		if (!user) {
+		if (!user) {// If not Admin => no access
 			res.status(401).json({ message: "User not found !" });
-      return;// User not found
+      return;
 		};
 		bcrypt.compare(req.body.password, user.password)// Check
 		.then(valid => {
@@ -104,16 +103,6 @@ exports.login = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
 	User.findAll({
-    // include: [
-    //   {
-    //     model: Message,
-    //     attributes: ['id'],
-    //     include: [
-    //       { model: Comment, attributes: ['id'] },
-    //       { model: Liking, attributes: ['id'] }
-    //     ]
-    //   }
-    // ],
     include: [
       { model: Message, attributes: ['id'] },
       { model: Comment, attributes: ['id'] },
@@ -125,7 +114,8 @@ exports.getAllUsers = (req, res, next) => {
 };
 
 exports.getOneUser = (req, res, next) => {
-	User.findOne({where : { id: req.params.id},
+	User.findOne({
+    where : { id: req.params.id},
     include: [
       { model: Message, attributes: ['id'] },
       { model: Comment, attributes: ['id'] },
@@ -136,47 +126,12 @@ exports.getOneUser = (req, res, next) => {
 	.catch(error => res.status(400).json({ error }));
 };
 
-// exports.modifyUser = (req, res, next) => {
-//   User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}, include: [Message, Comment, Liking]})
-//   .then((user) => {
-//     if (user.isAdmin || (user.id === req.params.userId)) {// If same userId because rights allows to proprior
-//       const userObject = req.file ? {
-//         ...JSON.parse(req.body.user),
-//         imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
-//       } : { ...req.body };
-//       if (req.file) {
-//         User.findOne({where : { id: req.params.id}})
-//         .then(user => {
-//           const filename = user.imageUrl.split('/images/users/')[1];
-//           fs.unlink('images/' + filename, () => {
-//             User.update(userObject, { where: {
-//               id: req.params.id,
-//               imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
-//             }})
-//             .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
-//             // .catch(error => res.status(400).json({ error }));
-//           });
-//         })
-//         .catch(error => res.status(400).json({ error }));
-//       } else {
-//         User.update(userObject, { where: { id: req.params.id }})
-//         .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
-//         .catch(error => res.status(400).json({ error }));
-//       };
-//     } else {
-//       res.status(403).json({ error })
-//       .catch(error => res.status(400).json({ error }));
-//     };
-//   })
-//   // .catch(error => res.status(512).json({ error }));
-// };
-
 exports.modifyUser = (req, res, next) => {
   if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
-      if (!user.isAdmin) {// If I am not Admin => go fuck
-        res.status(401).json({ message: "Vous n'êtes pas autorisé à supprimer cet utilisateur !"});
+      if (!user.isAdmin) {// If not Admin => no access
+        res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier cet utilisateur !"});
         return ;
       };
     })
@@ -194,7 +149,7 @@ exports.modifyUser = (req, res, next) => {
         // .catch(error => res.status(400).json({ error }));
       } else {
         const filename = user.imageUrl.split('/images/users/')[1];
-        fs.unlink('images/' + filename, () => {
+        fs.unlink('images/users/' + filename, () => {
           User.update(userObject, { where: { id: req.params.id }})
           .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
           // .catch(error => res.status(400).json({ error }));
@@ -212,8 +167,8 @@ exports.deleteUser = (req, res, next) => {
   if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
-      if (!user.isAdmin) {// If I am not Admin => go fuck
-        res.status(401).json({ message: "Vous n'êtes pas autorisé à supprimer cet utilisateur !"});
+      if (!user.isAdmin) {// If I am not Admin => no access
+        res.status(401).json({ message: "Vous n'êtes pas autorisé à supprimer cet utilisateur."});
         return ;
       };
     })
@@ -239,32 +194,6 @@ exports.deleteUser = (req, res, next) => {
     }
   })
 };
-
-// exports.deleteUser = (req, res, next) => {
-//   User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
-//   .then((user) => {
-//     if (user.isAdmin || (user.id === req.params.userId)) {// If same userId because rights allows to proprior
-//       User.findOne({where : { id: req.params.id}})
-//       .then(user => {
-//         const filename = user.imageUrl.split('/images/users/')[1];
-//         fs.unlink('images/users/' + filename, () => {
-//           User.destroy({
-//             where: { id: req.params.id},
-//             include: [Message, Comment, Liking]// INCLUDE at least Liking ????????????????????????????????????????
-//           })
-//           .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
-//           // .catch(error => res.status(400).json({ error }));
-//         });
-//       })
-//       // .catch(error => res.status(400).json({ error }));
-//     } else {
-//       res.status(403).json({ error })
-//       // .catch(error => res.status(400).json({ error }));
-//     };
-//   })
-//   // .catch(error => res.status(512).json({ error }));
-// };
-
 
 // exports.deleteUser = (req, res, next) => {
 //   User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})

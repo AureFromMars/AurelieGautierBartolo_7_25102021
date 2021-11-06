@@ -2,7 +2,7 @@
 const express = require('express');
 const commentRouter = express.Router();
 const commentCtrl = require('../controllers/comment');
-const token = require('../middleware/token');
+const token = require('../middlewares/token');
 
 // CRUD ENDPOINT = CREATE, READ, UPDATE, DELETE // Routes for comments
 

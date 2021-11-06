@@ -2,9 +2,9 @@
 const express = require('express');/// Import Express
 const userRouter = express.Router();// Create a new router object of the middleware
 const userCtrl = require('../controllers/user');
-const userValidator = require('../middleware/userValidator');
-const token = require('../middleware/token');
-const uploadImage = require('../middleware/uploadUserImage');
+const userValidator = require('../middlewares/userValidator');
+const token = require('../middlewares/token');
+const uploadImage = require('../middlewares/uploadUserImage');
 
 // CRUD ENDPOINT = CREATE, READ, UPDATE, DELETE // Routes for users
 userRouter.post('/register', uploadImage.single('file'), userValidator.emailValidator, userValidator.passwordValidator, userValidator.usernameValidator, userCtrl.register);
