@@ -1,4 +1,4 @@
-# AurelieGautierBartolo_7_25102021 README global
+# AurelieGautierBartolo_7_25102021
 Ce repository est celui du projet 7 du parcours OpenClassrooms Développeur Web.  
   
 Mission : Créer un réseau social d'entreprise
@@ -50,7 +50,16 @@ Le projet consiste à construire un réseau social interne pour les employés de
 - Spécifications fonctionnelles
 - Logos  
   
-# Installation du site
+## Installation complète du site en quelques clics
+
+Outils prérequis :
+- Visual Studio Code
+- WSL Debian (Windows Subsystem for Linux)
+- Commandes de base sous linux
+
+
+# Installation du BACKEND (pour développeurs)  
+  
 
 ## 1. Installer le repository github vec Visual Studio Code, Windows Subsystem for Linux et Debian  
 (Repository préalablement créé dans gihub)
@@ -68,42 +77,7 @@ Utiliser les commandes de base de linux pour se déplacer dans les dossier et ch
 ```
 git clone https://github.com/AureFromMars/AurelieGautierBartolo_7_22102021
 ```
-
-## 2. Lancer le serveur
-- Se positionner dans le dossier du repository
-- Se déplacer dans le dossier du backend
-```
-cd backend
-```
-- Lancer le script de lancement du serveur
-```
-npm run start
-```
-
-## 3. Ouvrir le site avec le navigateur
-- URL : http://localhost:3000
-
-# BACKEND
-
-
-# FRONTEND
-
-
-
-
-
-
-
-# AurelieGautierBartolo_7_22102021 README backend
-
-Outils prérequis :
-- Visual Studio Code
-- WSL Debian (Windows Subsystem for Linux)
-- Commandes de base sous linux
-- Vue CLI ?????????????????????????????
-
-# Installation du backend avec Debian
-
+  
 ## 1. Installer de Node.js  
 [Documentation](https://github.com/nodesource/distributions/blob/master/README.md)
 - Ouvrir une fenêtre VS Code
@@ -125,14 +99,18 @@ apt-get install -y nodejs
 ```
 npm init
 ```
-
+  
 ## 2. Installer nodemon server  
 => Pour surveiller les modifications de fichiers et éviter d'utiliser systématiquement node server
 ```
 npm install -g nodemon
 ```
 - Remplacer node par nodemon à package.json, et l'exécuter avec npm run start
-
+- Lancer le script de lancement du serveur
+```
+npm run start
+```
+  
 ## 3. Installer le framework Express
 [Documentation](http://expressjs.com/fr/)
 ```
@@ -140,17 +118,13 @@ npm install express
 ```
 N.B. Dès Express 4.16, bodyparser est inclu, utiliser expression.json() pour analyser le corps d'une requête  
 
-## 4. Installer le SGBD (Système de Gestion de Bases de Données) 
+## 4. Installer le SGBD (Système de Gestion de Bases de Données) Sequelize MySQL server
 => Pour manipuler les données d'une base  
-  
-### 1. Choix du serveur MySQL server
 - SQL (Structured Query Language)  
 = Langage le plus répandu pour interagir avec les bases de données (imposé par la mission, utilisé chez Calinda Software)
 - Choix de l'ORM (Object-Relational Mapping)
 = Sequelize de Node  
-=> Choix de PostgreSQL, utilisé chez Calinda Software, opensource et suit la syntaxe SQL de très près
 
-### 2. Installer Sequelize MySQL server
 [Documentation](https://www.npmjs.com/package/sequelize)
 - Installer Sequelize
 ```
@@ -172,7 +146,7 @@ module.exports = {
 ```
 - Initialiser Sequelize
 
-### 3. Installer MySQL Server
+## 5. Installer MySQL Server
 - Installer MySQL : https://dev.mysql.com/downloads/installer/ > version community (le second)
 [How to install MySQL community server on Debian](https://linuxconfig.org/how-to-install-mysql-community-server-on-debian-9-stretch-linux)
 ```
@@ -183,8 +157,25 @@ sudo apt install mysql-community-server
 ```
 sequelize model:create --name Groupomania --attributes "name:string, text:text, url:string"
 ```
-
-## 5. Ajouter les packages/extensions Node.js utiles pour le projet
+- Lancer MySQL Server
+```
+mysql -u root -proot
+```
+### SHORTCUTS DB
+```
+USE dbdev;
+SHOW TABLES;
+SHOW COLUMNS FROM User;
+SHOW COLUMNS FROM Message;
+SELECT * FROM User;
+SELECT * FROM Message;
+SELECT email FROM users WHERE email ='email@email.com';
+DROP TABLE Liking;// Pour supprimer définitivement la table user
+DROP TABLE Comment;
+DROP TABLE Message;
+DROP TABLE User;
+```
+## 6. Ajouter les packages/extensions Node.js supplémentaires utiles pour le projet
 - dot env pour travailler avec les variables d'environnement (globales, pour éviter d'avoir à tout éditer si besoin : URL, mots de passe, id, chemins d'accès aux fichiers, et données sécurisées (token, clés d'API, etc.)) : npm install dotenv
 - cors pour éviter d'avoir à écrire tous les headers : npm install cors
 - morgan pour logger les requêtes middleware HTTP : npm install morgan
@@ -195,32 +186,27 @@ sequelize model:create --name Groupomania --attributes "name:string, text:text, 
 - jsonwebtoken pour créer des tokens d'authentification : npm install jsonwebtoken
 - npm install multer ################################################
 
-
-- npm install -g @vue/cli pour le CLI global
-- vue create hello-world
-
-- npm install vue
-
-
-## POSTMAN
+# Exécuter des requêtes avec POSTMAN
 - Télécharger POSTMAN
 - Envoyer une requête en JSON : Body > raw > choisir JSON au lieu de text
+- Exemples :
 
-# BDD
-- Télécharger MySQL Workbench pour designer facilement la BDD
 
-mysql -u root -proot
-USE dbdev;
-SHOW TABLES;
-SHOW COLUMNS FROM User;
-SHOW COLUMNS FROM Message;
-SELECT * FROM User;
-SELECT * FROM Message;
+# Installer le FRONTEND
 
-SELECT email FROM users WHERE email ='email@email.com';
+## 1. Installer Vue.JS et les packages utiles  
+- npm install -g @vue/cli pour le CLI global
+- vue create frontend
+- npm install vue (choisir version 2)
+- npm install vue-router // A SUPPRIMER DU PACKAGE GLOBAL ????
+- npm install sass
+- npm install sass-loader@^10.2.0
+- npm install bootstrap
 
-// Pour supprimer définitivement la table user
-DROP TABLE Liking;
-DROP TABLE Comment;
-DROP TABLE Message;
-DROP TABLE User;
+
+
+
+- Fenêtre VS Code d'erreur manque fichier avec path : A AJOUTER ????????????????????????????
+https://vuejs.github.io/vetur/guide/FAQ.html#vetur-can-t-find-tsconfig-json-jsconfig-json-in-xxxx-xxxxxx
+
+## 2. Créer les dossiers
