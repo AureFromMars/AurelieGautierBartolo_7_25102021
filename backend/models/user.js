@@ -44,8 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
-        default: false
+        defaultValue: false
       },
       imageUrl: {
         type: DataTypes.STRING
