@@ -87,7 +87,7 @@ export default {
         //    console.log("token :", content.token)
         
         //Version SuperKev
-         
+
         // let user = {
         //   email : this.email,
         //   password : this.password
