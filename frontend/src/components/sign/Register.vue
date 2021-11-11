@@ -24,7 +24,6 @@
         <label for="bio" class="form-label">Décrivez-vous en quelques lignes si vous le souhaitez<br></label>
         <textarea v-model="bio" id="bio" name="bio" title="Décrivez-vous en quelques lignes si vous le souhaitez." placeholder="Décrivez-vous en quelques lignes si vous le souhaitez..." rows="4" cols="50"></textarea>
       </div> 
-      <!-- <button id="confirmRegister" name="confirmRegister" type="submit" class="btn" title="Connectez-vous à notre réseau social interne Groupomania">S'inscrire</button> -->
       <button v-on:click="register" type="submit" class="btn btn-primary btn-md" title="Inscrivez-vous sur notre réseau social interne Groupomania">S'inscrire</button>
     </form>
     <!-- <p class="message">Déjà enregistré ? <router-link to="/login">Connectez-vous</router-link></p> -->
@@ -36,9 +35,6 @@
 
 export default {
   name: 'Register',
-  props: {
-    // msg: String
-  },
   data() {
     return {
       explainErrorMessage: "Votre formulaire d'inscription comporte des erreurs.\nMerci de corriger les informations suivantes :\n\n",
@@ -53,12 +49,12 @@ export default {
   methods: {
     checkUsername: function () {
       if (this.username === ""){
-        this.errorMessage += "- vous n'avez pas renseigné votre Prénom.\n";
+        this.errorMessage += "- vous n'avez pas renseigné votre nom d'utilisateur.\n";
         // this.username.className += ' is-invalid';
         return false;
       }
       else if (!(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(this.username))) {// Mettre le regex à l'intérieur de /^ +$/
-        this.errorMessage += "- vous avez un caractère invalide dans votre Prénom.\n";
+        this.errorMessage += "- vous avez un caractère invalide dans votre nom d'utilisateur.\n";
         // this.username.className += ' is-invalid';
         return false;
       }
@@ -94,7 +90,7 @@ export default {
       return true;
     },
     register: function () {
-      try {
+      // try {
         this.checkUsername();
         this.checkEmail();
         this.checkPassword();
@@ -113,8 +109,10 @@ export default {
           bio : this.bio,
         };
         // Envoyer les données de l'objet au serveur
-        let functionRegister = async () => {
-          try {
+        // let functionRegister = async () => {
+        // let functionRegister = () => {
+
+          // try {
             fetch('http://localhost:3001/api/user/register', {
               method : 'POST',
               headers :{
@@ -122,19 +120,30 @@ export default {
               },
               body: JSON.stringify(user),
             })
-            .then( response => response.json())// VOIR SI TOUT METTRE DANS LE PREMIER THEN, sans console.log insécure ####################
-            .then( content => {
-              console.log("Données renvoyées par l'API :", content),
-              window.location.href = 'login'// Rediriger vers la page de loggin pour obtenir un token
-            });
-          } catch (e) {//Afficher une alerte d'erreur en cas de problèmes d'accès
-            alert(e)
-          }
-        };
-        functionRegister();
-      } catch (e) {//Afficher une alerte d'erreur en cas de problèmes d'accès
-        alert(e)
-      }
+            // .then( response => response.json())// VOIR SI TOUT METTRE DANS LE PREMIER THEN, sans console.log insécure ####################
+
+            .then( async response => {
+              const data = await response.json();
+              if(response.ok) {
+                console.log("data : ", data);
+              } else {
+                const error = data.message;
+                return Promise.reject(error);
+              }
+              
+            })// VOIR SI TOUT METTRE DANS LE PREMIER THEN, sans console.log insécure ####################
+            // .then( content => {
+            //   console.log("Données renvoyées par l'API :", content)
+            //   // window.location.href = 'login'
+            // });
+          // } catch (e) {
+          //   alert(e)
+          // }
+        // };
+        // functionRegister();
+      // } catch (e) {
+      //   alert(e)
+      // }
     }
   }
 }

@@ -14,20 +14,16 @@
 </template>
 
 <script>
-
 export default {
   name: 'Body'
 }
-
-
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.red-text {
-  color: #BA4D55;
-}
-.background-color {
-  background-color: #FFD7D7;
-}
+  .red-text {
+    color: #BA4D55;
+  }
+  .background-color {
+    background-color: #FFD7D7;
+  }
 </style>

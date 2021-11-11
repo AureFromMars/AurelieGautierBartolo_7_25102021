@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import CardUser from './helpers/CardUser.vue'
-import MenuUser from './helpers/MenuUser.vue'
+import CardUser from './CardUser.vue'
+import MenuUser from './MenuUser.vue'
 
 export default {
   name: 'Users',

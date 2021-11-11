@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Header from '../components/layout/Header.vue'
 import Body from '../components/layout/Body.vue'
 import Footer from '../components/layout/Footer.vue'
@@ -26,18 +25,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.img-container {
-  width: 600px;
-  height: 300px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-
 </style>

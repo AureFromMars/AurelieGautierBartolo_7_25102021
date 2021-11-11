@@ -6,8 +6,8 @@
         <img alt="Groupomania logo" src="../assets/icon-above-font.svg">
       </div>
       <div id="nav">
-        <router-link :to="{name:'Login'}"><button class="btn">Se connecter</button></router-link> |
-        <router-link :to="{name:'Register'}"><button class="btn">S'inscrire</button></router-link>
+        <router-link :to="{name:'login'}"><button class="btn">Se connecter</button></router-link> |
+        <router-link :to="{name:'register'}"><button class="btn">S'inscrire</button></router-link>
       </div>
       <router-view/>
     </div>
@@ -16,27 +16,9 @@
 
 <script>
 export default {
-  name: 'Sign',
-  props: {
-    // msg: String
-  },
-  components: {
-    // Register,
-    // Login
-  }
+  name: 'Sign'
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.img-container {
-  width: 100%;
-  height: 400px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
 </style>

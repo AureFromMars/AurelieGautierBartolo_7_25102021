@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import CardMessage from './helpers/CardMessage.vue'
-import MenuMessage from './helpers/MenuMessage.vue'
+import CardMessage from './CardMessage.vue'
+import MenuMessage from './MenuMessage.vue'
 
 export default {
   name: 'Messages',

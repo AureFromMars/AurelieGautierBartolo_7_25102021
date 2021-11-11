@@ -202,6 +202,7 @@ DROP TABLE User;
 - npm install sass
 - npm install sass-loader@^10.2.0
 - npm install bootstrap
+- npm install axios
 
 
 
