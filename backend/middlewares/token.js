@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models');
-const User = db.User;// User model
+const User = db.User;// User model TO SUPP ?????????????????????????????????
 
 module.exports = (req, res, next) => {
   try {
@@ -22,6 +22,6 @@ module.exports = (req, res, next) => {
     // });
     next();
   } catch (error) {
-    res.status(406).json({ error });
+    res.status(401).json({ error });
   }
 };

@@ -45,34 +45,36 @@ const router = new VueRouter({
         {
           path: 'messages',
           name: 'messages',
-          component: Messages,
-          children: [{
-            path: '/:id',
-            name: 'message',
-            component: Message
-          }]
+          component: Messages
+        },
+        {
+          path: 'message/:id',
+          name: 'message',
+          component: Message
         },
         {
           path: 'users',
           name: 'users',
-          component: Users,
-          children: [{
-            path: '/:id',
-            name: 'user',
-            component: User
-          }]
+          component: Users
+        },
+        {
+          path: 'user/:id',
+          name: 'user',
+          component: User
         }
       ]
     }
   ],
   mode:"history"
 })
-// router.beforeEach((to, from, next) => {
-//   if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
-//   else next()
-// }) // https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-
-// mettre le token dans le localStorage et vérifier si redirec vers home si requiresAuth = true
-// https://router.vuejs.org/guide/advanced/meta.html
+router.beforeEach((to, from, next) => {// ET SI LE TOKEN N'EST PLUS VALIDE ???
+  if ((to.name !== 'login' && to.name !== 'register') && !(localStorage.getItem('token'))){
+    console.log("Not logged, redirect to login");
+    next({ name: 'login' });
+  }
+  else next()
+})
+// Other way to do : https://router.vuejs.org/guide/advanced/meta.html
+// Define routes with requiresAuth=true, and if requiresAuth=true, then next to login
 
 export default router

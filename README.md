@@ -170,10 +170,12 @@ SHOW COLUMNS FROM Message;
 SELECT * FROM User;
 SELECT * FROM Message;
 SELECT email FROM users WHERE email ='email@email.com';
-DROP TABLE Liking;// Pour supprimer définitivement la table user
+DELETE FROM User;
+DROP TABLE Liking;// Pour supprimer définitivement la table User, supprimer les tables dépendantes
 DROP TABLE Comment;
 DROP TABLE Message;
 DROP TABLE User;
+// AJOUTER un Admin en base #########################################################
 ```
 ## 6. Ajouter les packages/extensions Node.js supplémentaires utiles pour le projet
 - dot env pour travailler avec les variables d'environnement (globales, pour éviter d'avoir à tout éditer si besoin : URL, mots de passe, id, chemins d'accès aux fichiers, et données sécurisées (token, clés d'API, etc.)) : npm install dotenv

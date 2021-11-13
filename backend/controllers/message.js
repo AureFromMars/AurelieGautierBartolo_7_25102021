@@ -26,7 +26,7 @@ exports.createMessage = (req, res, next) => {
       userId: req.token.userId,
     })
     .then(() => res.status(201).json({ message: "Message enregistré !"}))// Revoir si je laisse les données de la requête ou le message perso ############################################
-    // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
+    .catch(error => res.status(400).json({ error }));// Recode the number #################################################
   }
 };
 
@@ -52,7 +52,7 @@ exports.getOneMessage = (req, res, next) => {
     ]
   })
   .then((messages) => res.status(200).json(messages))// Callback that returns the promise
-  .catch(error => res.status(404).json({ error }));// Callback error
+  .catch(error => res.status(400).json({ error }));// Callback error
 };
 
 exports.modifyMessage = (req, res, next) => {

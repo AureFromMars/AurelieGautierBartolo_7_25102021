@@ -16,7 +16,6 @@
 
 <script>
 import CardUser from './CardUser.vue'
-import MenuUser from './MenuUser.vue'
 
 export default {
   name: 'Users',
@@ -24,8 +23,7 @@ export default {
     // title: String
   },
   components: {
-    CardUser,
-    MenuUser
+    CardUser
   },
   el: '#user-card',
   data() {// A changer pour fonction qui fait une requête pour récupérer et envoyer en base

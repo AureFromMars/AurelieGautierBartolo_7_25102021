@@ -1,8 +1,8 @@
 <template>
   <nav class="shadow-sm navbar navbar-expand-lg navbar-light d-flex flex-row flex-wrap justify-content-between ps-4 pe-5">
-    <a class="navbar-brand my-auto" href="home.html">
+    <router-link :to="{name:'home'}" class="navbar-brand my-auto">
       <img src="../../assets/icon-left-font2.png" height=100 alt="Logo Groupomania" title="Page d'accueil d'Orinoco, votre meilleur site de vente en ligne" />
-    </a>
+    </router-link>
     <div class="d-flex flex-row flex-nowrap justify-content-end ps-4">
       <!-- <form id="searchForm" class="d-flex flex-row flex-nowrap">
           <input id="searchInput" class="form-control form-control-search" type="search" placeholder="Rechercher..." aria-label="Rechercher un article">
@@ -20,16 +20,16 @@
             </router-link>
           </li>
           <li class="nav-item ms-2">
-            <router-link class="nav-link" :to="{ name: 'user'}">
+            <div v-on:click="myAccount" class="nav-link" type="button">
               <p class="tertiary-color mb-2">Mon compte</p>
               <i class="tertiary-color fas fa-user-circle fa-2x"></i>
-            </router-link>
+            </div>
           </li>
           <li class="nav-item ms-2">
-            <router-link class="nav-link" :to="{ name: 'default'}">
+            <div v-on:click="logout" class="nav-link" type="button">
               <p class="tertiary-color mb-2">Quitter</p>
               <i class="tertiary-color fas fa-sign-out-alt fa-2x"></i>
-            </router-link>
+            </div>
           </li>
         </ul>
       </div>
@@ -38,16 +38,24 @@
 </template>
 
 <script>
+
 export default {
-  name: 'Header'
+  name: 'Header',
+  methods: {
+    myAccount: function () {
+      this.$router.push('user/' + localStorage.getItem('userId'));
+    },
+    logout: function () {
+      localStorage.clear();
+      this.$router.push({ name: 'login' });
+    }
+  }
 }
+
 </script>
 
 <style lang="scss" scoped>
   .navbar-toggler {
     border-color: #091F43;
-    // &-icon {
-    //     color: #091F43;
-    // }
   }
 </style>

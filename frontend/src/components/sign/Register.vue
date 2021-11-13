@@ -1,6 +1,6 @@
 <template>
   <div id="register" class="container">
-    <form id="userRegisterForm" name="userRegisterForm" class="d-flex flex-column justify-content evenly">
+    <form  v-on:submit.prevent="register" id="userRegisterForm" name="userRegisterForm" class="d-flex flex-column justify-content evenly" method="post">
       <div class="form-group my-2">
         <label for="username" class="form-label">Nom d'utilisateur<abbr title="Ce champ est obligatoire">*</abbr></label>
         <input v-model="username" id="username" name="username" class="form-control" title="Veuillez renseigner votre nom d'utilisateur." placeholder="Veuillez renseigner votre nom d'utilisateur..." type="text" required />
@@ -24,14 +24,16 @@
         <label for="bio" class="form-label">Décrivez-vous en quelques lignes si vous le souhaitez<br></label>
         <textarea v-model="bio" id="bio" name="bio" title="Décrivez-vous en quelques lignes si vous le souhaitez." placeholder="Décrivez-vous en quelques lignes si vous le souhaitez..." rows="4" cols="50"></textarea>
       </div> 
-      <button v-on:click="register" type="submit" class="btn btn-primary btn-md" title="Inscrivez-vous sur notre réseau social interne Groupomania">S'inscrire</button>
+      <!-- <button v-on:click="register" type="submit" name="submit" class="btn btn-primary btn-md" title="Inscrivez-vous sur notre réseau social interne Groupomania">S'inscrire</button> -->
+      <button type="submit" name="submit" class="btn btn-primary btn-md" title="Inscrivez-vous sur notre réseau social interne Groupomania">S'inscrire</button>
     </form>
     <!-- <p class="message">Déjà enregistré ? <router-link to="/login">Connectez-vous</router-link></p> -->
   </div>
 </template>
 
 <script>
-// import Registered from '@/components/notifications/Registered.vue'
+// import Registered from '@/components/notifications/Registered.vue' // @ if succeed to replace src folder
+import { requestWithoutAuth } from '../../http-common' // If want to store base URL and headers, else import axios directly
 
 export default {
   name: 'Register',
@@ -53,7 +55,7 @@ export default {
         // this.username.className += ' is-invalid';
         return false;
       }
-      else if (!(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(this.username))) {// Mettre le regex à l'intérieur de /^ +$/
+      else if (!(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/.test(this.username))) {// Mettre le regex à l'intérieur de /^ +$/
         this.errorMessage += "- vous avez un caractère invalide dans votre nom d'utilisateur.\n";
         // this.username.className += ' is-invalid';
         return false;
@@ -90,60 +92,70 @@ export default {
       return true;
     },
     register: function () {
-      // try {
-        this.checkUsername();
-        this.checkEmail();
-        this.checkPassword();
+      this.checkUsername();
+      this.checkEmail();
+      this.checkPassword();
 
-        if (this.errorMessage != "") {
-          alert(this.explainErrorMessage + this.errorMessage);
-          return false;// Arrêter la fonction
+      if (this.errorMessage != "") {
+        alert(this.explainErrorMessage + this.errorMessage);
+        return false;// Arrêter la fonction
+      }
+
+/* VERSION 2 avec axios */
+      requestWithoutAuth.post('user/register', {
+        username : this.username,
+        email : this.email,
+        password : this.password,
+        picture : this.picture,// #####################################################################
+        bio : this.bio
+      })
+      .then( async response => {
+        console.log('response.data : ', response.data)
+        const data = await response.data;
+        if(response) {
+          console.log("data : ", data);
+          this.$router.push({ name: 'login' });
+          // window.location.href = 'login';
+        } else {
+          const error = data.message;
+          return Promise.reject(error);
         }
+      })
+      .catch(error => {
+        console.log("error : ", error);
+      })
+/* END VERSION 2 */
 
-        // Définir mon objet user à transmettre à l'API
-        let user = {
-          username : this.username,
-          email : this.email,
-          password : this.password,
-          picture : this.picture,// #####################################################################
-          bio : this.bio,
-        };
-        // Envoyer les données de l'objet au serveur
-        // let functionRegister = async () => {
-        // let functionRegister = () => {
+/* VERSION 1 sans axios */
+    // let user = {
+    //   username : this.username,
+    //   email : this.email,
+    //   password : this.password,
+    //   picture : this.picture,// #####################################################################
+    //   bio : this.bio
+    // };
+    // fetch('http://localhost:3001/api/user/register', {
+    //   method : 'POST',
+    //   headers :{
+    //     'Content-type' : 'application/json'
+    //   },
+    //   body: JSON.stringify(user),
+    // })
+    // .then( async response => {
+    //   const data = await response.json();
+    //   if(response.ok) {
+    //     console.log("data : ", data);
+    //     window.location.href = 'login';
+    //   } else {
+    //     const error = data.message;
+    //     return Promise.reject(error);
+    //   }
+    // })
+    // .catch(error => {
+    //   console.log("error :", error);
+    // })
+/* END VERSION 1 */
 
-          // try {
-            fetch('http://localhost:3001/api/user/register', {
-              method : 'POST',
-              headers :{
-                'Content-type' : 'application/json'
-              },
-              body: JSON.stringify(user),
-            })
-            // .then( response => response.json())// VOIR SI TOUT METTRE DANS LE PREMIER THEN, sans console.log insécure ####################
-
-            .then( async response => {
-              const data = await response.json();
-              if(response.ok) {
-                console.log("data : ", data);
-              } else {
-                const error = data.message;
-                return Promise.reject(error);
-              }
-              
-            })// VOIR SI TOUT METTRE DANS LE PREMIER THEN, sans console.log insécure ####################
-            // .then( content => {
-            //   console.log("Données renvoyées par l'API :", content)
-            //   // window.location.href = 'login'
-            // });
-          // } catch (e) {
-          //   alert(e)
-          // }
-        // };
-        // functionRegister();
-      // } catch (e) {
-      //   alert(e)
-      // }
     }
   }
 }

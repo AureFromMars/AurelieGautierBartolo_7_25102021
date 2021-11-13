@@ -56,7 +56,7 @@ exports.login = (req, res, next) => {
 	const decryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();
 	User.findOne({where : { email: decryptEmail }})// Check if users exists in DB
 	.then(user => {
-		if (!user) {// If not Admin => no access
+		if (!user) {// If not User => no access
 			res.status(401).json({ message: "User not found !" });
       return;
 		};
@@ -68,6 +68,7 @@ exports.login = (req, res, next) => {
 			} else {
 				res.status(200).json({
 					userId: user.id,
+          isAdmin: user.isAdmin,
 					token: jwt.sign(
 						{ userId: user.id }, process.env.TOKEN_SECRET.toString(), { expiresIn: '2h' }// VARIABLE D'ENV ###########################
 					),
