@@ -213,3 +213,11 @@ DROP TABLE User;
 https://vuejs.github.io/vetur/guide/FAQ.html#vetur-can-t-find-tsconfig-json-jsconfig-json-in-xxxx-xxxxxx
 
 ## 2. Créer les dossiers
+
+
+
+
+
+# SETUP git ssh
+https://github.com/MrStanDu33/ProcessusWebServ#setup-github-ssh-key
+(entrer plusieurs fois jusqu'à key)

@@ -17,7 +17,7 @@ exports.createComment = (req, res, next) => {
 
 exports.getAllCommentsFromMessage = (req, res, next) => {
   Comment.findAll({
-    where: {messageId: req.body.messageId},
+    where: {messageId: req.params.messageId},
     include: [
       { model: User},
       { model: Message}

@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     login: function () {
-      requestWithoutAuth.post('user/login', {
+      requestWithoutAuth().post('user/login', {
         email: this.email,
         password: this.password
       })

@@ -1,24 +1,23 @@
 <template>
-  <!-- <div class="user-cards d-flex flex-wrap"> -->
-    <div class="user-card rounded-3 bg-white m-auto p-2 p-sm-3 d-flex flex-row">
-      <div class="text-center w-30">
-        <a href="#" class="text-decoration-none">
-          <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
-          <p class="text-muted">{{ user.username }}</p>
-        </a>
-      </div>
-      <div class="d-flex flex-column w-100 ps-3">
-        <div class="d-flex flex-row flex-wrap justify-content-between">
-          <h6 class="tertiary-color">{{ user.username }}</h6>
-          <div class="d-flex flex-row flex-nowrap text-muted small">
-            <span><i class="far fa-comment"></i> 3</span>
-            <span class="ms-2"><i class="far fa-thumbs-up"></i> 19</span>
-          </div>
-        </div>
-        <p>{{ user.createdAt }}</p>
-        <p>{{ user.bio }}</p>
-      </div>
+  <div class="user-card rounded-3 bg-white m-auto p-2 p-sm-3 d-flex flex-row">
+    <div class="text-center w-30">
+      <a href="#" class="text-decoration-none">
+        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
+        <p class="text-muted">{{ user.username }}</p>
+      </a>
     </div>
+    <div class="d-flex flex-column w-100 ps-3">
+      <div class="d-flex flex-row flex-wrap justify-content-between">
+        <h6 class="tertiary-color">{{ user.username }}</h6>
+        <div class="d-flex flex-row flex-nowrap text-muted small">
+          <span><i class="far fa-comment"></i> 3</span>
+          <span class="ms-2"><i class="far fa-thumbs-up"></i> 19</span>
+        </div>
+      </div>
+      <p>{{ user.createdAt }}</p>
+      <p>{{ user.bio }}</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -44,7 +43,7 @@ export default {
       //   bio: this.bio,
       //   imgUrl: this.imgUrl
       // })
-      requestAuth.get(`user/one/${this.id}`)
+      requestAuth().get(`user/one/${this.id}`)
       .then(async response => {
         const data = await response.data;
         if (response) {

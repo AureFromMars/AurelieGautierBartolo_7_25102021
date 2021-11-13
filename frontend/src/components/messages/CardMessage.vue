@@ -7,81 +7,37 @@
         <p class="text-muted">{{ message.userId }}</p>
       </a>
     </div>
-    <!-- <div type="button" @click="getOneMessage" class="d-flex flex-column w-100 ps-3"> -->
-    <div type="button" class="d-flex flex-column w-100 ps-3">
-      <div class="d-flex flex-row flex-wrap justify-content-between">
-        <h6 class="tertiary-color">{{ message.title }}</h6>
-        <div class="d-flex flex-row flex-nowrap text-muted small">
-          <span><i class="far fa-comment"></i> 3</span>
-          <span class="ms-2"><i class="far fa-thumbs-up"></i> 19</span>
+    <router-link :to="'message/' + this.message.id" class="d-flex flex-column w-100 ps-3 text-decoration-none text-black">
+      <div class="d-flex flex-column w-100 ps-3">
+        <div type="button" class="d-flex flex-column w-100 ps-3">
+          <div class="d-flex flex-row flex-wrap justify-content-between">
+            <h6 class="tertiary-color">{{ message.title }}</h6>
+            <Counter/>
+            <!-- <div class="d-flex flex-row flex-nowrap text-muted small">
+              <span><i class="far fa-comment"></i> 3</span>
+              <span class="ms-2"><i class="far fa-thumbs-up"></i> 19</span>
+            </div> -->
+          </div>
+          <p>{{ message.createdAt }}</p>
+          <p>{{ message.content }}</p>
         </div>
       </div>
-      <p>{{ message.createdAt }}</p>
-      <p>{{ message.content }}</p>
-    </div>
-    <!-- <Message v-show="isModalVisible" @close="closeMessage" /> -->
+    </router-link>
   </div>
 </div>
 </template>
 
 <script>
-// import Message from './Message.vue';
-import { requestAuth } from '../../http-common'
+import Counter from '../helpers/Counter.vue'
 
 export default {
   name: 'CardMessage',
   components: {
-    // Message
+    Counter
   },
   props: [
     'message'// peut être défini comme tableau ou boolean
-  ],
-  // data() {
-  //   return {
-  //     isModalVisible: false,
-  //     message: {
-  //       id: null,
-  //       title: null,
-  //       content: null,
-  //       imgUrl: null
-  //     },
-  //   };
-  // },
-  methods: {
-    getOneMessage: function () {
-      console.log("this.message : ", this.message.id);
-      requestAuth.get('message/one/', {
-        id: this.message.id,
-        title: this.message.title,
-        content: this.message.content,
-        imgUrl: this.message.imgUrl
-      })
-      .then(async response => {
-        const data = await response.data;
-        if (response) {
-          console.log("youpiiiii");
-          this.message = response.data;
-          // this.$router.push('message/' + response.data.id);
-          // hideLoader(); // Cacher le loader lorsque les cartes sont créées
-        } else {
-          const error = data.message;
-          return Promise.reject(error);
-        }
-      })
-      .catch(error => {
-        console.log("error :", error);
-      });
-      // this.$router.push('message/' + id);
-      this.isModalVisible = true;
-    },
-    closeMessage() {
-      this.isModalVisible = false;
-      this.message = '';
-    }
-  },
-  mounted() {
-    this.getOneMessage()
-  }
+  ]
 }
 </script>
 

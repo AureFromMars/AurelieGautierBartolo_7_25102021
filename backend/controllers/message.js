@@ -47,7 +47,7 @@ exports.getOneMessage = (req, res, next) => {
     where : { id: req.params.id },
     include: [
       { model: User},
-      { model: Comment},
+      { model: Comment, include: {model : User}},
       { model: Liking}
     ]
   })

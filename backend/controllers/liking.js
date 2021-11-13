@@ -21,7 +21,7 @@ exports.addLiking = (req, res, next) => {
 
 exports.getAllLikingFromUser = (req, res, next) => {
   Liking.findAll({
-    where: {userId: req.body.userId},
+    where: {userId: req.params.userId},
     include: [
       { model: User},
       { model: Message}

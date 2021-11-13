@@ -1,6 +1,6 @@
 <template>
   <div id="register" class="container">
-    <form  v-on:submit.prevent="register" id="userRegisterForm" name="userRegisterForm" class="d-flex flex-column justify-content evenly" method="post">
+    <form  v-on:submit.prevent="requestSelectorFileOrNot" id="userRegisterForm" name="userRegisterForm" class="d-flex flex-column justify-content evenly" method="post">
       <div class="form-group my-2">
         <label for="username" class="form-label">Nom d'utilisateur<abbr title="Ce champ est obligatoire">*</abbr></label>
         <input v-model="username" id="username" name="username" class="form-control" title="Veuillez renseigner votre nom d'utilisateur." placeholder="Veuillez renseigner votre nom d'utilisateur..." type="text" required />
@@ -17,8 +17,9 @@
         <input id="password-verify" title="Saisissez à nouveau votre mot de passe." placeholder="Saisissez à nouveau votre mot de passe..." class="form-control" type="text" required />
       </div> -->
       <div class="form-group my-2 d-flex flex-column">
-        <label for="picture" class="form-label">Image de profil</label>
-        <button id="picture" name="picture">Sélectionnez sur<br/>votre ordinateur</button>
+        <label for="file" class="form-label">Image de profil</label>
+        <!-- <button id="file" name="file">Ajouter l'image</button> -->
+        <input v-on:change="handleFileUpload" id="file" name="file" type="file" accept="image/*" ref="file" />
       </div>
       <div class="form-group my-2">
         <label for="bio" class="form-label">Décrivez-vous en quelques lignes si vous le souhaitez<br></label>
@@ -34,6 +35,7 @@
 <script>
 // import Registered from '@/components/notifications/Registered.vue' // @ if succeed to replace src folder
 import { requestWithoutAuth } from '../../http-common' // If want to store base URL and headers, else import axios directly
+import { requestWithoutAuthWithFile } from '../../http-common' // If want to store base URL and headers, else import axios directly
 
 export default {
   name: 'Register',
@@ -44,7 +46,7 @@ export default {
       username: null,
       email: null,
       password: null,
-      picture: null,
+      file: null,
       bio: null
     }
   },
@@ -100,13 +102,10 @@ export default {
         alert(this.explainErrorMessage + this.errorMessage);
         return false;// Arrêter la fonction
       }
-
-/* VERSION 2 avec axios */
-      requestWithoutAuth.post('user/register', {
+      requestWithoutAuth().post('user/register', {
         username : this.username,
         email : this.email,
         password : this.password,
-        picture : this.picture,// #####################################################################
         bio : this.bio
       })
       .then( async response => {
@@ -124,40 +123,59 @@ export default {
       .catch(error => {
         console.log("error : ", error);
       })
-/* END VERSION 2 */
+    },
+    handleFileUpload(  ){
+      this.file = this.$refs.file.files.item(0);
+      console.log('this.file : ', this.file);
+    },
+    registerWithFile: function () {
+      this.checkUsername();
+      this.checkEmail();
+      this.checkPassword();
 
-/* VERSION 1 sans axios */
-    // let user = {
-    //   username : this.username,
-    //   email : this.email,
-    //   password : this.password,
-    //   picture : this.picture,// #####################################################################
-    //   bio : this.bio
-    // };
-    // fetch('http://localhost:3001/api/user/register', {
-    //   method : 'POST',
-    //   headers :{
-    //     'Content-type' : 'application/json'
-    //   },
-    //   body: JSON.stringify(user),
-    // })
-    // .then( async response => {
-    //   const data = await response.json();
-    //   if(response.ok) {
-    //     console.log("data : ", data);
-    //     window.location.href = 'login';
-    //   } else {
-    //     const error = data.message;
-    //     return Promise.reject(error);
-    //   }
-    // })
-    // .catch(error => {
-    //   console.log("error :", error);
-    // })
-/* END VERSION 1 */
+      if (this.errorMessage != "") {// FAIRE ?????????????????????? ###############################
+        alert(this.explainErrorMessage + this.errorMessage);
+        return false;// Arrêter la fonction
+      }
+      let formData = new FormData();
+      console.log('formData : ', formData);
+      console.log('formData.append("file", this.file) : ', formData.append("file", this.file));
 
+      requestWithoutAuthWithFile().post('user/register', {
+        user: {
+          username : this.username,
+          email : this.email,
+          password : this.password,
+          bio : this.bio        
+        },
+        // file : this.file,
+        headers: formData.getHeaders(),
+        file : formData.append("file", this.file)
+        
+      })
+      .then( async response => {
+        console.log('response.data : ', response.data)
+        const data = await response.data;
+        if(response) {
+          console.log("data : ", data);
+          this.$router.push({ name: 'login' });
+        } else {
+          const error = data.message;
+          return Promise.reject(error);
+        }
+      })
+      .catch(error => {
+        console.log("error : ", error);
+      })
+    },
+    requestSelectorFileOrNot: function () {
+      if (this.file != null) {
+        this.registerWithFile()
+      } else {
+        this.register()
+      }
     }
-  }
+  },
 }
 </script>
 
