@@ -31,6 +31,14 @@ exports.getAllLikingFromUser = (req, res, next) => {
   .catch(error => res.status(444).json({ error }));
 };
 
+exports.getAllLikingFromMessage = (req, res, next) => {
+  Liking.findAll({
+    where: { messageId: req.params.messageId }
+  })
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(444).json({ error }));
+};
+
 exports.getOneLiking = (req, res, next) => {
   Liking.findOne({ 
     where : { id: req.params.id},
@@ -44,7 +52,7 @@ exports.getOneLiking = (req, res, next) => {
 };
 
 exports.modifyLiking = (req, res, next) => {
-  if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
+  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If I am not Admin => no access
@@ -53,16 +61,16 @@ exports.modifyLiking = (req, res, next) => {
       };
     })
   };
-	Liking.findOne({ where : { id: req.params.id} })
+	Liking.findOne({ where : { id: req.body.id} })
 	.then(liking => {
-		Liking.update(req.body,{ where: { id: req.params.id } })
+		Liking.update(req.body,{ where: { id: req.body.id } })
 		.then(() => res.status(201).json({ message: "Like/Dislike modifié !"}))
 		.catch(error => res.status(470).json({ error }));
 	})
 };
 
 exports.deleteLiking = (req, res, next) => {
-  if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
+  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If I am not Admin => no access
@@ -71,9 +79,9 @@ exports.deleteLiking = (req, res, next) => {
       };
     })
   };
-	Liking.findOne({ where : { id: req.params.id} })
+	Liking.findOne({ where : { id: req.body.id} })
   .then(() => {
-    Liking.destroy({where : { id: req.params.id }})
+    Liking.destroy({where : { id: req.body.id }})
     .then(() => res.status(201).json({ message: "Like/Dislike supprimé !"}))
     .catch(error => res.status(410).json({ error }));    
   })

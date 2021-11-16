@@ -70,7 +70,7 @@ exports.login = (req, res, next) => {
 					userId: user.id,
           isAdmin: user.isAdmin,
 					token: jwt.sign(
-						{ userId: user.id }, process.env.TOKEN_SECRET.toString(), { expiresIn: '2h' }// VARIABLE D'ENV ###########################
+						{ userId: user.id }, process.env.TOKEN_SECRET.toString(), { expiresIn: '2h' }
 					),
 					message: "Utilisateur connecté !"
 				})

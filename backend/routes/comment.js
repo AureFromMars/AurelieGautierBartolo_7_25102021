@@ -6,11 +6,11 @@ const token = require('../middlewares/token');
 
 // CRUD ENDPOINT = CREATE, READ, UPDATE, DELETE // Routes for comments
 
-commentRouter.post('/create/', token, commentCtrl.createComment);
+commentRouter.post('/create', token, commentCtrl.createComment);
 commentRouter.get('/allFromMessage/:messageId', token, commentCtrl.getAllCommentsFromMessage);
 commentRouter.get('/one/:id', token, commentCtrl.getOneComment);
-commentRouter.put('/modify/:id', token, commentCtrl.modifyComment);
-commentRouter.delete('/delete/:id', token, commentCtrl.deleteComment);
+commentRouter.put('/modify', token, commentCtrl.modifyComment);
+commentRouter.delete('/delete', token, commentCtrl.deleteComment);
 
 // EXPORT router module
 module.exports = commentRouter;
