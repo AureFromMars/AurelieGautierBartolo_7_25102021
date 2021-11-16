@@ -1,0 +1,63 @@
+@charset 'utf-8';// pour forcer l'encodage en cas de problème
+
+// @import "./global";
+// @import "./variables";
+
+$COLOR_PRIMARY: #BA4D55;
+$COLOR_SECONDARY: #FFD7D7;
+$COLOR_TERTIARY: #091F43;
+$DARK_GREY: rgb(53, 53, 53);
+$XHIGHT_GREY: #AEAEAE;
+$MEDIUM_GREY: #D4D4D4;
+$LIGHT_GREY: rgb(246, 246, 246);
+
+body {
+  color: $COLOR-TERTIARY;
+}
+
+h1 {
+  color: $COLOR_TERTIARY;
+  margin-top: 10px;
+  text-align: center;
+}
+
+h2 {
+  color: $COLOR_PRIMARY;
+  text-align: center;
+}
+
+.primary-color {
+  color: $COLOR_PRIMARY;
+}
+
+.secondary-color {
+  color: $COLOR_SECONDARY;
+}
+
+.tertiary-color {
+  color: $COLOR_TERTIARY;
+}
+
+.btn {
+  max-width: 200px;
+  color: white;
+  border-color: none;
+  background-color: $COLOR-TERTIARY;
+
+  &:hover {
+    background-color: $COLOR_PRIMARY;
+    color: white;
+  }
+
+  &:active {
+    background-color: $COLOR_SECONDARY;
+  }
+};
+
+.nav-link {
+  color: $COLOR_PRIMARY;
+
+  &:active, &:focus, &:hover {
+    color: $COLOR-TERTIARY;
+  }
+}

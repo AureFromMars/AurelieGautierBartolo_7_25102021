@@ -17,10 +17,11 @@
 
 <script>
 import { requestAuth } from '../../http-common'
+import LogoutService from '../services/LogoutService'
 
 export default {
   name: 'AddComment',
-  data() {// A changer pour fonction qui fait une requête pour récupérer et envoyer en base
+  data() {
     return {
       content: null
     }
@@ -34,8 +35,6 @@ export default {
       .then(async response => {
         const data = await response.data;
         if (response) {
-          // this.$router.push({ name: 'home' });
-          // location.reload();
           this.$emit('newCommentEvent');
         } else {
           const error = data.message;
@@ -44,6 +43,7 @@ export default {
       })
       .catch(error => {
         console.log("error : ", error);
+        if (error.response.status === 401) {LogoutService()}
       })
     }
   }

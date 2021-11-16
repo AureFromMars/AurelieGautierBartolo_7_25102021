@@ -1,17 +1,17 @@
 import { requestAuth } from '../../http-common';
 
 class CommentDataService {
-  getAll(id) {
+  getAllFromMessage(id) {
     return requestAuth().get(`/message/comment/allFromMessage/${id}`);
   }
   create(data) {
     return requestAuth().post('/message/comment/create', data);
   }
-  update(id, data) {
-    return requestAuth().put(`/message/modify/${id}`, data);
+  update(data) {
+    return requestAuth().put(`/message/comment/modify`, data);
   }
-  delete(id) {
-    return requestAuth().delete(`/message/delete/${id}`);
+  delete(data) {
+    return requestAuth().delete(`/message/comment/delete`, data);
   }
 }
 export default new CommentDataService();

@@ -1,12 +1,12 @@
 <template>
   <div id="sign" class="min-vh-100 m-auto d-flex">
-    <div class="container m-auto d-flex flex-nowrap flex-column justify-content-center text-center align-middle">
-      <h1>Bienvenue<br/>sur le réseau social de<br/>Groupomania !</h1>
+    <div class="p-2 m-auto d-flex flex-nowrap flex-column justify-content-center text-center align-middle">
       <div class="img-container m-auto">
-        <img alt="Groupomania logo" src="../assets/icon-above-font.svg">
+        <img alt="Groupomania logo" title="Logo de Groupomania" class="w-100" src="../assets/icon-above-font.svg">
       </div>
-      <div id="nav">
-        <router-link :to="{name:'login'}"><button class="btn">Se connecter</button></router-link> |
+      <h1>Bienvenue<br/>sur le réseau social de<br/>Groupomania !</h1>
+      <div id="nav" class="my-4">
+        <router-link :to="{name:'login'}"><button class="btn me-2">Se connecter</button></router-link>
         <router-link :to="{name:'register'}"><button class="btn">S'inscrire</button></router-link>
       </div>
       <router-view/>
@@ -21,4 +21,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 </style>

@@ -1,8 +1,9 @@
 <template>
-  <div class="d-flex flex-row flex-nowrap text-muted m-auto">
-    <div class="m-auto"><i class="far fa-comment"></i> 3</div>
-    <div class="m-auto"><CounterLiking/></div>
-    <!-- <span class="ms-2"><i class="far fa-thumbs-up"></i> 19</span> -->
+  <div class="d-flex flex-row flex-nowrap text-muted h-100 ">
+    <div class="m-auto d-flex flex-row flex-nowrap m-auto"><i class="far fa-comment"></i> 3</div>
+    <div class="m-auto d-flex flex-row flex-nowrap">
+      <CounterLiking :messageId="message.id"/>
+    </div>
 </div>
 </template>
 
@@ -12,6 +13,7 @@ import CounterLiking from './CounterLiking.vue'
 export default {
   name: 'Counter',
   props: [
+    'message'
   ],
   components: {
     CounterLiking

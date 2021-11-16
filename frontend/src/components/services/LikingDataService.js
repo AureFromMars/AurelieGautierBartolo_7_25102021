@@ -1,17 +1,20 @@
 import { requestAuth } from '../../http-common';
 
 class LikingDataService {
-  getAll(id) {
+  getAllFromUser(id) {
     return requestAuth().get(`/message/liking/allFromUser/${id}`);
   }
-  create(data) {
-    return requestAuth().post('/message/liking/create', data);
+  getAllFromMessage(id) {
+    return requestAuth().get(`/message/liking/allFromMessage/${id}`);
   }
-  update(id, data) {
-    return requestAuth().put(`/message/modify/${id}`, data);
+  add(data) {
+    return requestAuth().post('/message/liking/add', data);
   }
-  delete(id) {
-    return requestAuth().delete(`/message/delete/${id}`);
+  update(data) {
+    return requestAuth().put(`/message/liking/modify`, data);
+  }
+  delete(data) {
+    return requestAuth().delete(`/message/liking/delete`, data);
   }
 }
 export default new LikingDataService();

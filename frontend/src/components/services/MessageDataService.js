@@ -9,17 +9,17 @@ class MessageDataService {
   get(id) {
     return requestAuth().get(`/message/one/${id}`);
   }
+  getAllFromUser(id) {
+    return requestAuth().get(`/message/allFromUser/${id}`);
+  }
   create(data) {
     return requestAuth().post('/message/create', data);
   }
-  update(id, data) {
+  modify(id, data) {
     return requestAuth().put(`/message/modify/${id}`, data);
   }
-  delete(id) {
-    return requestAuth().delete(`/message/delete/${id}`);
+  delete(id, data) {
+    return requestAuth().delete(`/message/delete/${id}`, data);
   }
-  // findByTitle(title) {
-  //   return requestAuth.get(`/message?title=${title}`);
-  // }
 }
 export default new MessageDataService();

@@ -1,7 +1,7 @@
 <template>
   <div id="body" class="m-0 px-5 py-2 h-100 w-100 m-auto d-flex flex-column justify-content-between">
     <div class="rounded-3 background-red h-100 d-flex flex-column">
-    <div class="m-2"><MenuUser/></div>
+    <!-- <div class="m-2"><MenuUser/></div> -->
     <div class="user-cards d-flex flex-row flex-wrap justify-content-center">
         <CardUser
         v-for="(user) in users"

@@ -3,30 +3,33 @@
     <router-link :to="{name:'home'}" class="navbar-brand my-auto">
       <img src="../../assets/icon-left-font2.png" height=100 alt="Logo Groupomania" title="Page d'accueil d'Orinoco, votre meilleur site de vente en ligne" />
     </router-link>
-    <div class="d-flex flex-row flex-nowrap justify-content-end ps-4">
-      <!-- <form id="searchForm" class="d-flex flex-row flex-nowrap">
-          <input id="searchInput" class="form-control form-control-search" type="search" placeholder="Rechercher..." aria-label="Rechercher un article">
-          <button id="searchButton" class="btn btn-primary" type="submit">Rechercher</button>
-      </form> -->
-      <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <div class="d-flex flex-row flex-nowrap justify-content-end ps-4 small">
+      <button class="navbar-toggler ms-2 min-h-300" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Bouton de navigation" title="Bouton de navigation">
         <span class="navbar-toggler-icon"></span>
+        Menu
       </button>
       <div class="collapse navbar-collapse mx-2" id="navbarContent">
-        <ul class="d-flex flex-row navbar-nav me-auto mb-2 mb-lg-0 text-center">
+        <ul class="d-flex flex-row navbar-nav me-auto mb-lg-0 text-center">
           <li class="nav-item ms-2">
-            <router-link class="nav-link" :to="{ name: 'home'}">
+            <router-link :to="{ name: 'home'}" class="text-decoration-none">
               <p class="tertiary-color mb-2">Accueil</p>
               <i class="tertiary-color fas fa-home fa-2x"></i>
             </router-link>
           </li>
           <li class="nav-item ms-2">
-            <div v-on:click="myAccount" class="nav-link" type="button">
+            <div v-on:click="myAccount" class="text-decoration-none" type="button">
               <p class="tertiary-color mb-2">Mon compte</p>
               <i class="tertiary-color fas fa-user-circle fa-2x"></i>
             </div>
           </li>
+          <li v-if="displayAdminButton" class="nav-item ms-2">
+            <router-link :to="{ name: 'users'}" class="text-decoration-none" type="button">
+              <p class="tertiary-color mb-2">Les utilisateurs</p>
+              <i class="tertiary-color fas fa-users fa-2x"></i>
+            </router-link>
+          </li>
           <li class="nav-item ms-2">
-            <div v-on:click="logout" class="nav-link" type="button">
+            <div v-on:click="logout" class="text-decoration-none" type="button">
               <p class="tertiary-color mb-2">Quitter</p>
               <i class="tertiary-color fas fa-sign-out-alt fa-2x"></i>
             </div>
@@ -38,24 +41,32 @@
 </template>
 
 <script>
+import LogoutService from '../services/LogoutService'
 
 export default {
   name: 'Header',
+  data() {
+    return {
+      isAdmin: false
+    }
+  },
   methods: {
-    myAccount: function () {
-      this.$router.push('user/' + localStorage.getItem('userId'));
-    },
     logout: function () {
-      localStorage.clear();
-      this.$router.push({ name: 'login' });
+      LogoutService()
+    },
+    myAccount: function () {
+      if( !(this.$route.name == 'user' && this.$route.params.id == localStorage.getItem('userId')) ) {
+        this.$router.push({ name: 'user', params: {id: localStorage.getItem('userId')} });
+      }
+    },
+    displayAdminButton: function () {
+      if (localStorage.getItem('isAdmin') == 'true') {
+        return this.isAdmin = true
+      }
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-  .navbar-toggler {
-    border-color: #091F43;
-  }
 </style>

@@ -10,14 +10,13 @@ import Messages from '../components/messages/Messages.vue'
 import Message from '../components/messages/Message.vue'
 
 Vue.use(VueRouter)
-// Ajouter une redirection vers le loging si pas connecté // C'est pas un path if token pas bon, alors redirection login
-// Si connecté => Home // middleware pour vérifier si besoin connecter
+
 const router = new VueRouter({
   routes: [
     {
       path: '/',
       name: 'default',
-      redirect: '/sign/login'// A revoir après middleware
+      redirect: '/home'
     },
     {
       path: '/sign',
@@ -67,14 +66,12 @@ const router = new VueRouter({
   ],
   mode:"history"
 })
-router.beforeEach((to, from, next) => {// ET SI LE TOKEN N'EST PLUS VALIDE ???
+router.beforeEach((to, from, next) => {
   if ((to.name !== 'login' && to.name !== 'register') && !(localStorage.getItem('token'))){
     console.log("Not logged, redirect to login");
     next({ name: 'login' });
   }
   else next()
 })
-// Other way to do : https://router.vuejs.org/guide/advanced/meta.html
-// Define routes with requiresAuth=true, and if requiresAuth=true, then next to login
 
 export default router

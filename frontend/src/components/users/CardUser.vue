@@ -9,7 +9,7 @@
                 <span class="d-none d-sm-inline-block"><i class="far fa-file-alt"></i> 19</span>
                 <span><i class="far fa-comment ms-2"></i> 3</span>
             </div>
-            <h6 class="tertiary-color">{{ user.username }}</h6>
+            <h6>{{ user.username }}</h6>
           </div>
           <p class="my-2">{{ user.bio }}</p>
         </div>
@@ -32,11 +32,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.user-card {
-  width: 200px;
+// .user-card {
+//   width: 200px;
 
-  &-top {
-    gap: 10px;
-  }
-}
+//   &-top {
+//     gap: 10px;
+//   }
+// }
 </style>

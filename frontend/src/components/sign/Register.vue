@@ -1,34 +1,37 @@
 <template>
   <div id="register" class="container">
+    <h2 class="text-center">Formulaire d'inscription</h2>
     <form  v-on:submit.prevent="requestSelectorFileOrNot" id="userRegisterForm" name="userRegisterForm" class="d-flex flex-column justify-content evenly" method="post">
       <div class="form-group my-2">
         <label for="username" class="form-label">Nom d'utilisateur<abbr title="Ce champ est obligatoire">*</abbr></label>
-        <input v-model="username" id="username" name="username" class="form-control" title="Veuillez renseigner votre nom d'utilisateur." placeholder="Veuillez renseigner votre nom d'utilisateur..." type="text" required />
+        <input v-model="username" id="username" name="username" class="form-control text-uppercase" title="Votre nom d'utilisateur (obligatoire)" placeholder="Veuillez renseigner votre nom d'utilisateur..." type="text" required />
       </div>
       <div class="form-group my-2">
         <label for="email" class="form-label">Adresse email<abbr title="Ce champ est obligatoire">*</abbr></label>
-        <input v-model="email" id="email" name="email" class="form-control" title="Veuillez renseigner une adresse email valide." placeholder="Veuillez renseigner une adresse email valide..." type="email" required />
+        <input v-model="email" id="email" name="email" class="form-control" title="Adresse email de l'utilisateur (obligatoire)" placeholder="Veuillez renseigner une adresse email valide..." type="email" required />
       </div>
       <div class="form-group my-2">
         <label for="password" class="form-label">Mot de passe<abbr title="Ce champ est obligatoire">*</abbr></label>
-        <input v-model="password" id="password" name="password" class="form-control" title="Veuillez saisir votre mot de passe." placeholder="Veuillez saisir votre mot de passe..." type="text" required />
+        <input v-model="password" id="password" name="password" class="form-control" title="Mot de passe de l'utilisateur (obligatoire)" placeholder="Veuillez saisir votre mot de passe..." type="text" required />
       </div>
-      <!-- <div class="form-group my-2">
-        <input id="password-verify" title="Saisissez à nouveau votre mot de passe." placeholder="Saisissez à nouveau votre mot de passe..." class="form-control" type="text" required />
-      </div> -->
-      <div class="form-group my-2 d-flex flex-column">
+      <div class="form-group my-2 d-flex flex-column text-center">
         <label for="file" class="form-label">Image de profil</label>
-        <!-- <button id="file" name="file">Ajouter l'image</button> -->
-        <input v-on:change="handleFileUpload" id="file" name="file" type="file" accept="image/*" ref="file" />
+        <div class="d-flex flex-wrap flex-row justify-content-center">
+          <!-- <label for="file-upload" class="file-upload">
+              <input v-on:change="handleFileUpload" type="file" accept="image/*" id="file-upload" name="Bouton de chargement de l'image de profil (optionnel)" title="Bouton de chargement de l'image de profil (optionnel)" />
+              Label
+          </label> -->
+          <input v-on:change="handleFileUpload" type="file" accept="image/*" id="file" name="Bouton de chargement de l'image de profil (optionnel)" title="Bouton de chargement de l'image de profil (optionnel)" />
+        </div>
       </div>
-      <div class="form-group my-2">
-        <label for="bio" class="form-label">Décrivez-vous en quelques lignes si vous le souhaitez<br></label>
-        <textarea v-model="bio" id="bio" name="bio" title="Décrivez-vous en quelques lignes si vous le souhaitez." placeholder="Décrivez-vous en quelques lignes si vous le souhaitez..." rows="4" cols="50"></textarea>
-      </div> 
-      <!-- <button v-on:click="register" type="submit" name="submit" class="btn btn-primary btn-md" title="Inscrivez-vous sur notre réseau social interne Groupomania">S'inscrire</button> -->
-      <button type="submit" name="submit" class="btn btn-primary btn-md" title="Inscrivez-vous sur notre réseau social interne Groupomania">S'inscrire</button>
+      <div class="form-group my-2 d-flex flex-column">
+        <label for="biographie" class="form-label">Biographie<br></label>
+        <textarea v-model="bio" id="biographie" name="biographie" class="form-control" title="Description de l'utilisateur (optionnel)" placeholder="Décrivez-vous en quelques lignes si vous le souhaitez (fonction, missions, description personnelle...)" rows="4" cols="50"></textarea>
+      </div>
+      <div>
+        <button type="submit" name="submit" class="btn" title="Validez votre inscription à Groupomania">Valider l'inscription</button>
+      </div>
     </form>
-    <!-- <p class="message">Déjà enregistré ? <router-link to="/login">Connectez-vous</router-link></p> -->
   </div>
 </template>
 
@@ -124,8 +127,10 @@ export default {
         console.log("error : ", error);
       })
     },
-    handleFileUpload(  ){
-      this.file = this.$refs.file.files.item(0);
+    handleFileUpload( event ){
+      // console.log('');
+      this.file = event.target.files[0]
+      // this.$refs.file.files.item(0);
       console.log('this.file : ', this.file);
     },
     registerWithFile: function () {
@@ -138,21 +143,15 @@ export default {
         return false;// Arrêter la fonction
       }
       let formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("user", JSON.stringify({
+        username : this.username,
+        email : this.email,
+        password : this.password,
+        bio : this.bio        
+      }))
       console.log('formData : ', formData);
-      console.log('formData.append("file", this.file) : ', formData.append("file", this.file));
-
-      requestWithoutAuthWithFile().post('user/register', {
-        user: {
-          username : this.username,
-          email : this.email,
-          password : this.password,
-          bio : this.bio        
-        },
-        // file : this.file,
-        headers: formData.getHeaders(),
-        file : formData.append("file", this.file)
-        
-      })
+      requestWithoutAuthWithFile().post('user/register', formData)
       .then( async response => {
         console.log('response.data : ', response.data)
         const data = await response.data;
@@ -181,5 +180,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
 </style>
