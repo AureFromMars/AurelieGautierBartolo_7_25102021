@@ -117,7 +117,6 @@ export default {
         if(response) {
           console.log("data : ", data);
           this.$router.push({ name: 'login' });
-          // window.location.href = 'login';
         } else {
           const error = data.message;
           return Promise.reject(error);
@@ -128,9 +127,7 @@ export default {
       })
     },
     handleFileUpload( event ){
-      // console.log('');
       this.file = event.target.files[0]
-      // this.$refs.file.files.item(0);
       console.log('this.file : ', this.file);
     },
     registerWithFile: function () {

@@ -12,7 +12,7 @@ $MEDIUM_GREY: #D4D4D4;
 $LIGHT_GREY: rgb(246, 246, 246);
 
 body {
-  color: $COLOR-TERTIARY;
+  color: $COLOR_TERTIARY;// A REVOIR OU CA IMPACTE ##############
 }
 
 h1 {
@@ -39,10 +39,12 @@ h2 {
 }
 
 .btn {
-  max-width: 200px;
+  max-width: 130px;
   color: white;
   border-color: none;
   background-color: $COLOR-TERTIARY;
+  font-size: 0.9em;
+  text-transform: uppercase;
 
   &:hover {
     background-color: $COLOR_PRIMARY;
@@ -51,6 +53,12 @@ h2 {
 
   &:active {
     background-color: $COLOR_SECONDARY;
+  }
+
+  &-admin  {
+    background-color: $COLOR-PRIMARY;
+    font-size: 0.7em;
+    // text-transform: uppercase;
   }
 };
 

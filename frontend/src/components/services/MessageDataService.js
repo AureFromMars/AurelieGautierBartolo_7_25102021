@@ -1,12 +1,10 @@
 import { requestAuth } from '../../http-common';
 
-
-
 class MessageDataService {
   getAll() {
     return requestAuth().get('/message/all');
   }
-  get(id) {
+  getOne(id) {
     return requestAuth().get(`/message/one/${id}`);
   }
   getAllFromUser(id) {

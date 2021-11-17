@@ -34,8 +34,8 @@ app.options('*', cors());
 app.use(express.json());// parse application/json
 app.use(express.urlencoded({ extended: true }));// parse requests of content-type - application/x-www-form-urlencoded
 
-// Set the file path for the HTML file ####################################################################################################
-const htmlPath = path.join(__dirname + "../frontend/index.html");
+// Allows to get the images folder from frontend
+app.use('/images', express.static(process.cwd() + '/images'))
 
 /*************** Set simple routes ***************/
 app.use('/api/user', userRouter);// Create authentification route

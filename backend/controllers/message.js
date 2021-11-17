@@ -34,6 +34,7 @@ exports.getAllMessages = (req, res, next) => {
   Message.findAll({
     include: [
       { model: User },
+      { model: Comment },
       { model : Liking }
     ]
   })

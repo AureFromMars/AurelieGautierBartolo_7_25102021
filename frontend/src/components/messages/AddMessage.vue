@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import { requestAuth } from '../../http-common'
 import LogoutService from '../services/LogoutService'
+import MessageDataService from "../services/MessageDataService"
 
 export default {
   name: 'AddMessage',
-  data() {// A changer pour fonction qui fait une requête pour récupérer et envoyer en base #############################
+  data() {
     return {
       title: null,
       content: null,
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     addMessage: function () {
-      requestAuth().post('message/create', {
+      MessageDataService.create({
         title : this.title,
         content : this.content,
         imgUrl : this.imgUrl
@@ -44,6 +44,8 @@ export default {
         const data = await response.data;
         if (response) {
           this.$emit('newMessageEvent');
+          this.title = "";
+          this.content = "";
         } else {
           const error = data.message;
           return Promise.reject(error);

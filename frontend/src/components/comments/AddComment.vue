@@ -8,7 +8,7 @@
           <textarea v-model="content" id="new-content" name="new-content" placeholder="Saisissez le contenu de votre message..." />
         </div>
         <div class="add-message-buttons form-group my-2 d-flex flex-row">
-          <button type="submit" name="submit" class="btn btn-primary" title="Enregistrer un nouveau commentaire">Enregistrer le commentaire</button>
+          <button type="submit" name="submit" class="btn" title="Enregistrer un nouveau commentaire">Enregistrer le commentaire</button>
         </div>
       </form>
     </div>
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { requestAuth } from '../../http-common'
 import LogoutService from '../services/LogoutService'
+import CommentDataService from "../services/CommentDataService"
 
 export default {
   name: 'AddComment',
@@ -28,18 +28,13 @@ export default {
   },
   methods: {
     addComment: function () {
-      requestAuth().post('message/comment/create', {
+      CommentDataService.create({
         content : this.content,
         messageId: this.$route.params.id
       })
-      .then(async response => {
-        const data = await response.data;
-        if (response) {
-          this.$emit('newCommentEvent');
-        } else {
-          const error = data.message;
-          return Promise.reject(error);
-        }
+      .then(() => {
+        this.$emit('newCommentEvent');
+        this.content = "";
       })
       .catch(error => {
         console.log("error : ", error);

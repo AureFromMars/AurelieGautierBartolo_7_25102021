@@ -2,13 +2,15 @@
   <!-- Attention, v-if car infos non récupérées au départ avant chargement de message -->
   <div v-if="message!==null" class="message-card rounded-3 bg-white m-auto p-2 p-sm-3 d-flex flex-column">
     <div class="d-flex flex-row">
-      <router-link :to="{name:'user', params: {id: this.message.userId}}" class="text-center w-30 text-decoration-none">
-        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
-        <p class="text-muted small">{{ message.User.username }}</p>
-      </router-link>
-      <div v-if="displayAdminOrOwnerButtons">
-        <div v-on:click="displayModifyMessage" class="m-auto" title="Bouton de modification du message" type="button">Modifier</div>
-        <div v-on:click="deleteMessage" class="m-auto" title="Bouton de suppression du message" type="button">Supprimer</div>
+      <div class="d-flex flex-column w-20">
+        <router-link :to="{name:'user', params: {id: this.message.userId}}" class="text-center w-30 text-decoration-none">
+          <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
+          <p class="text-decoration-none tertiary-color small fw-bold">{{ message.User.username }}</p>
+        </router-link>
+        <div v-if="displayAdminOrOwnerButtons" class="d-flex flex-column">
+          <div v-on:click="displayModifyMessage" class="btn btn-admin w-100 mb-2" title="Bouton de modification du message" type="button">Modifier</div>
+          <div v-on:click="deleteMessage" class="btn btn-admin w-100" title="Bouton de suppression du message" type="button">Supprimer</div>
+        </div>
       </div>
       <div class="d-flex flex-column w-100 ps-3">
         <div class="d-flex flex-row flex-wrap justify-content-between">
@@ -50,6 +52,7 @@
     <div class="message-cards d-flex flex-wrap justify-content-center">
       <CardComment
         v-for="(comment) in orderedComments" 
+        v-on:newCommentEvent="getAllComments"
         :key="comment.id"
         :comment="comment"
       />
@@ -111,7 +114,7 @@ export default {
   },
   methods: {
     getOneMessage: function () {
-      MessageDataService.get(this.$route.params.id)
+      MessageDataService.getOne(this.$route.params.id)
       .then(response => {
         this.message = response.data;
         this.comments = this.message.Comments;
@@ -165,9 +168,7 @@ export default {
         imgUrl : this.message.imgUrl
       })
       .then(() => {
-        console.log('before this.displayModifyForm : ', this.displayModifyForm )
         this.displayModifyForm = !this.displayModifyForm
-        console.log('after this.displayModifyForm : ', this.displayModifyForm )
       })
       .catch(error => {
         console.log("error : ", error);
@@ -199,6 +200,5 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
 </style>

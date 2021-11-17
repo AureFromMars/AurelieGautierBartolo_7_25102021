@@ -40,11 +40,11 @@ exports.getOneComment = (req, res, next) => {
 };
 
 exports.modifyComment = (req, res, next) => {
-  if(req.token.userId !== req.body.uesrId) {// If I am not owner then am I Admin ?
+  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If I am not Admin => no access
-        res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce commentaire."});
+        res.status(403).json({ message: "Vous n'êtes pas autorisé à modifier ce commentaire."});
         return ;
       };
     })

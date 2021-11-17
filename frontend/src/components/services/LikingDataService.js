@@ -10,7 +10,7 @@ class LikingDataService {
   add(data) {
     return requestAuth().post('/message/liking/add', data);
   }
-  update(data) {
+  modify(data) {
     return requestAuth().put(`/message/liking/modify`, data);
   }
   delete(data) {

@@ -228,24 +228,20 @@ https://github.com/MrStanDu33/ProcessusWebServ#setup-github-ssh-key
 - Si pas de commentaires => afficher un message
 - progress images
 - infos bulles inscription toussa
-- reload page if no token
-- heure UTC
-- middleware token et/ou beforeEach dans router/index.js
-- corriger requêtes avec services
 - compte ADMIN
 - gérer le tri des messages par millisecondes !!!
+- pourquoi j'ai des requêtes OPTIONS 204 ?
 
 # Release
 - créer un compte Super Admin pour gérer les Admin
 - permettre aux Admin de gérer les autres Admin
 - afficher les messages progressivement
 - revoir toutes les erreurs
+- changer l'heure automatiquement selon heure locale (au lieu de UTC+1)
 
 # STAN
-- faire un reload page quand le token n'est plus valide (middleware)
-// Catch sur tous les appels avec vérif de code 401 : non identifié => route login
-// 403 : pas autorisé
 - multiples sass // pas grave
+- préaparation GIT/start project
 
 
 

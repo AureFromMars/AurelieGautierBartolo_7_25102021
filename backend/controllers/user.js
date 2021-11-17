@@ -92,7 +92,10 @@ exports.getOneUser = (req, res, next) => {
 	User.findOne({
     where : { id: req.params.id},
     include: [
-      { model: Message},
+      { model: Message, include: [
+        { model: Comment},
+        { model: Liking}
+      ]},
       { model: Comment},
       { model: Liking}
     ]

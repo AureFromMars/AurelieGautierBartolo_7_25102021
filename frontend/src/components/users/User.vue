@@ -2,12 +2,13 @@
   <!-- Attention, v-if car infos non récupérées au départ avant chargement de user -->
   <div v-if="user!==null" class="message-card rounded-3 bg-white m-auto p-2 p-sm-3 d-flex flex-column">
     <div class="d-flex flex-row">
-      <div class="text-center w-30">
+      <!-- <div class="text-center w-30">
         <a href="#" class="text-decoration-none">
-          <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
+          <img :src="selectUserImage()" class="rounded-circle" width="50" alt="Image utilisateur"/>
           <p class="text-muted">{{ user.username }}</p>
         </a>
-      </div>
+      </div> -->
+      <UserProfile :user="user" />
       <div class="d-flex flex-column w-100 ps-3">
         <div class="d-flex flex-row flex-wrap justify-content-between">
           <h6 class="tertiary-color">{{ user.username }}</h6>
@@ -20,69 +21,60 @@
     <div class="message-cards d-flex flex-wrap justify-content-center">
       <div class="d-flex flex-row flex-nowrap p-0 h-100 m-auto">
         <div class="m-auto d-flex flex-column h-100">
-          <div v-on:click="displayMessagesSwitch()" class="m-auto" title="Voir mes messages" type="button">Mes messages</div>
-          <div v-on:click="displayCommentsSwitch()" class="m-auto" title="Voir mes commentaires" type="button">Mes commentaires</div>
-          <!-- <div v-on:click="displayLikingsSwitch()" class="m-auto" title="Voir mes messages" type="button">Mes préférés</div> -->
+          <div v-on:click="displayMessagesSwitch()" class="btn m-auto" title="Voir mes messages" type="button">Mes messages</div>
+          <div v-on:click="displayCommentsSwitch()" class="btn m-auto" title="Voir mes commentaires" type="button">Mes commentaires</div>
           <div v-if="displayMessages">
             <CardMessage
-              v-for="(message, index) in messages" 
+              v-for="(message, index) in messages"
               :key="index"
               :message="message"
             />
           </div>
           <div v-if="displayComments">
             <CardComment
-              v-for="(comment, index) in comments" 
+              v-for="(comment, index) in comments"
+              v-on:newCommentEvent="getOneUser"
               :key="index"
               :comment="comment"
             />
           </div>
         </div>
       </div>
-      <!-- <CardComment
-        :class="{ active: index == currentIndex }" 
-        v-for="(comment, index) in comments" 
-        :key="index"
-        :comment="comment"
-      /> -->
     </div>
   </div>
 </template>
 
 <script>
 import UserDataService from "../services/UserDataService"
-// import MessageDataService from "../services/MessageDataService"
-// import CommentDataService from "../services/CommentDataService"
-// import LikingDataService from "../services/LikingDataService"
+
 import CardMessage from '../messages/CardMessage.vue'
 import CardComment from '../comments/CardComment.vue'
 import LogoutService from '../services/LogoutService'
+import UserProfile from '../helpers/UserProfile'
 
 export default {
   name: 'User',
   components: {
     CardMessage,
-    CardComment
+    CardComment,
+    UserProfile
   },
   data() {// A changer pour fonction qui fait une requête pour récupérer et envoyer en base
     return {
       user: null,
       messages: null,
       comments: null,
-      // likings: null,
       displayMessages: false,
       displayComments: false,
-      // displayLikings: false
     }
   },
   methods: {
     getOneUser: function () {
-      UserDataService.get(this.$route.params.id)
+      UserDataService.getOne(this.$route.params.id)
       .then(response => {
         this.user = response.data;
         this.messages = this.user.Messages;
         this.comments = this.user.Comments;
-        // this.liking = this.user.Likings;
         console.log(response.data);
       })
       .catch(error => {
@@ -93,35 +85,26 @@ export default {
     displayMessagesSwitch() {
       this.displayMessages= true;
       this.displayComments= false;
-      // this.displayLikings= false
     },
     displayCommentsSwitch() {
       this.displayMessages= false;
       this.displayComments= true;
-      // this.displayLikings= false
+    },
+    selectUserImage() {
+      if(this.user.imageUrl === null) {
+        return 'https://bootdey.com/img/Content/avatar/avatar3.png'
+      } else {
+        return this.user.imageUrl;
+      }
+    },
+    refreshList() {
+      this.retrieveMessages();
+      this.currentMessage = null;
+      this.currentIndex = -1;
     },
   },
-  // displayLikingsSwitch() {
-  //   this.displayMessages= false;
-  //   this.displayComments= false;
-  //   this.displayLikings= true
-  // },
-  // getAllMessages() {
-  //   MessageDataService.getAllFromUser(this.$route.params.id)
-  //   // MessageDataService.getAll({ params:{messageId : this.$route.params.id} })
-  //   .then(response => {
-  //     this.messages = response.data;
-  //     console.log(response.data);
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //   });
-  // },
-  refreshList() {
-    this.retrieveMessages();
-    this.currentMessage = null;
-    this.currentIndex = -1;
-  },
+
+
   // getAllComments() {
   //   CommentDataService.getAll(this.$route.params.id)
   //   // CommentDataService.getAll({ params:{messageId : this.$route.params.id} })
@@ -147,9 +130,7 @@ export default {
     this.getOneUser()
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-
 </style>
