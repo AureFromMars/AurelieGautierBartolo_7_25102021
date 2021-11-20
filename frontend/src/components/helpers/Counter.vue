@@ -1,13 +1,11 @@
 <template>
-  <div class="d-flex flex-row flex-nowrap text-muted h-100">
-    <div class="btn py-0 px-1 m-auto d-flex flex-row flex-nowrap h-100" title="Nombre de commentaires">
+  <div id="counter" class="d-flex flex-column flex-nowrap text-muted h-100 gap ">
+    <div class="counter btn py-0 px-1 d-flex flex-row flex-nowrap h-100 ms-auto justify-content-end" title="Nombre de commentaires">
       <i class="m-auto far fa-comment fa-sm"></i>
       <span class="m-auto ps-1 small">{{ this.message.Comments.length }}</span>
     </div>
-    <div class="m-auto d-flex flex-row flex-nowrap">
-      <CounterLiking :messageId="message.id"/>
-    </div>
-</div>
+    <CounterLiking :messageId="message.id"/>
+  </div>
 </template>
 
 <script>
@@ -24,7 +22,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .btn {
   background-color: $COLOR_PRIMARY;

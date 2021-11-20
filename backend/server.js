@@ -5,27 +5,27 @@ const dotenv = require('dotenv');// dotenv to create environment variables // On
 dotenv.config();// Could be included in above line
 
 const http = require('http');
-const app = require('./app');// Importer le app.js
+const app = require('./app');// Import app.js
 
-// Définir, normaliser un port valide : numéro ou chaîne
+// Define, nomalize a valid prot : number or string
 const normalizePort = val => {
     const port = parseInt(val, 10);
     if (isNaN(port)) {return val;}
     if (port >= 0) {return port;}
     return false;
 };
-const port = normalizePort(process.env.PORT);// Normaliser le port dont le numéro est stocké dans .env
-app.set('port', port);// Créer, setter le port dans app.js
+const port = normalizePort(process.env.PORT);// Nomalize port witch number is stored in .env
+app.set('port', port);// Create, set port in app.js
 
-const server = http.createServer(app);// Fonction d'appel d'app.js
+const server = http.createServer(app);// Calling function to app.js
 
 const address = server.address();
 const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
 
 // Event listener for HTTP server "error" event
-const errorHandler = error => {//Rechercher et gérer les erreurs
+const errorHandler = error => {// Search and manage errors
     if (error.syscall !== 'listen') {throw error;}
-    switch (error.code) {//Instruction similaire à if...else
+    switch (error.code) {// Similare instruction than if...else
         case 'EACCES':
             console.error(bind + ' requires elevated privileges.');
             process.exit(1);

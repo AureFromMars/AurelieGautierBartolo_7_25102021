@@ -1,7 +1,6 @@
 /* ATTENTION, pour switch de type de requête JSON ou mutipart/form-data avec POSTMAN :
 - j'ai créé des switch de méthodes entre req.file/req.user et req.body.user
-- A UNIFORMISER SI LE TEMPS ME LE PERMET !!
-- Sinon : "refactorisation" impérative pour la suite !*/
+- A UNIFORMISER SI LE TEMPS ME LE PERMET*/
 
 // Imports
 const db = require('../models');
@@ -12,10 +11,10 @@ const Liking = db.Liking;// Liking model
 // const {User, Message, Comment, Liking} = require('../models');// Equals to lines above
 const bcrypt = require('bcrypt');// Bcrypt package and set salt to hash password
 const saltRounds = 10;// Allows to complexify encrypt executing 10 times the hashing algorithm
-const cryptoJs = require('crypto-js');// Crypto-js package to encrypt than decrypt email
+const cryptoJs = require('crypto-js');// Crypto-js package to encrypt email
 const jwt = require('jsonwebtoken');// jsonwebtoken package to create a token
-const token = require('../middlewares/token');// SUPP ############################################################################?????????????????????????????????????????????????????
-const fs = require('fs');// File system Node module to manager files
+const token = require('../middlewares/token');
+const fs = require('fs');// File system Node module to manager files 
 
 exports.register = (req, res, next) => {// For further cases IRL : create a specific route to uploads images because multer allows to upload even if User ins't valid
   if (req.file) {
@@ -23,7 +22,7 @@ exports.register = (req, res, next) => {// For further cases IRL : create a spec
       ...JSON.parse(req.body.user),
       imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
     };
-    const encryptEmail = cryptoJs.HmacSHA256(userObject.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
+    const encryptEmail = cryptoJs.HmacSHA256(userObject.email, process.env.EMAIL_ENCRYPT_KEY).toString();
     bcrypt.hash(userObject.password, saltRounds)// Hashing password to encrypt with SHA 512 Bit... allows to compare 2 files that should be the same if not corrupted, but never decrypted
     .then((hash) => {
       delete userObject.id;
@@ -34,9 +33,9 @@ exports.register = (req, res, next) => {// For further cases IRL : create a spec
       })
       .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
     })
-    // .catch(error => res.status(454).json({ error }));// Recode the number #################################################
+    .catch(error => res.status(400).json({ error }));
   } else {
-    const encryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();// Encryption that can be further decrypted
+    const encryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();
     bcrypt.hash(req.body.password, saltRounds)
     .then((hash) => {
       delete req.body.id;
@@ -47,23 +46,22 @@ exports.register = (req, res, next) => {// For further cases IRL : create a spec
       })
       .then(() => res.status(201).json({ message: "Utilisateur enregistré !"}))
     })
-    // .catch(error => res.status(456).json({ error }));// Recode the number #################################################
+    .catch(error => res.status(400).json({ error }));
   }
 };
 
-// Login authentification
 exports.login = (req, res, next) => {
-	const decryptEmail = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();
-	User.findOne({where : { email: decryptEmail }})// Check if users exists in DB
+	const emailInDb = cryptoJs.HmacSHA256(req.body.email, process.env.EMAIL_ENCRYPT_KEY).toString();
+	User.findOne({where : { email: emailInDb }})// Check if users exists in DB
 	.then(user => {
 		if (!user) {// If not User => no access
-			res.status(401).json({ message: "User not found !" });
+			res.status(400).json({ message: "User not found !" });
       return;
 		};
 		bcrypt.compare(req.body.password, user.password)// Check
 		.then(valid => {
 			if (!valid) {
-				res.status(401).json({ message: "Password failed !" });
+				res.status(400).json({ message: "Password failed !" });
         return;// Password failed // If...return, then no need to write else because stop the instruction
 			} else {
 				res.status(200).json({
@@ -74,12 +72,12 @@ exports.login = (req, res, next) => {
 					),
 					message: "Utilisateur connecté !"
 				})
-				// .catch(error => res.status(400).json({ error }));// Recode the number #################################################
+				.catch(error => res.status(500).json({ error }));
 			};
 		})
-		// .catch(error => res.status(501).json({ error }));// Recode the number #################################################
+		.catch(error => res.status(500).json({ error }));
 	})
-	// .catch(error => res.status(502).json({ error }));// Recode the number #################################################
+	.catch(error => res.status(500).json({ error }));
 };
 
 exports.getAllUsers = (req, res, next) => {
@@ -93,11 +91,14 @@ exports.getOneUser = (req, res, next) => {
     where : { id: req.params.id},
     include: [
       { model: Message, include: [
-        { model: Comment},
-        { model: Liking}
+        { model: Comment },
+        { model: Liking },
+        { model: User }
       ]},
-      { model: Comment},
-      { model: Liking}
+      { model: Comment, include : [
+        { model: User }
+      ]},
+      { model: Liking }
     ]
   })
 	.then((messages) => res.status(200).json(messages))
@@ -105,7 +106,7 @@ exports.getOneUser = (req, res, next) => {
 };
 
 exports.modifyUser = (req, res, next) => {
-  if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
+  if(req.token.userId != req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If not Admin => no access
@@ -123,26 +124,26 @@ exports.modifyUser = (req, res, next) => {
       };
       if (user.imageUrl == null || user.imageUrl == "") {
         User.update(userObject, { where: { id: req.params.id }})
-        .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
-        // .catch(error => res.status(400).json({ error }));
+        .then(() => res.status(201).json({ message: "Utilisateur modifié !"}))
+        .catch(error => res.status(400).json({ error }));
       } else {
         const filename = user.imageUrl.split('/images/users/')[1];
         fs.unlink('images/users/' + filename, () => {
           User.update(userObject, { where: { id: req.params.id }})
-          .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
-          // .catch(error => res.status(400).json({ error }));
+          .then(() => res.status(201).json({ message: "Utilisateur modifié !"}))
+          .catch(error => res.status(400).json({ error }));
         });
       }
     } else {
       User.update(req.body, { where: { id: req.params.id }})
-      .then(() => res.status(200).json({ message: "Utilisateur modifié !"}))
-      // .catch(error => res.status(400).json({ error }));
+      .then(() => res.status(201).json({ message: "Utilisateur modifié !"}))
+      .catch(error => res.status(400).json({ error }));
     };
   })
 };
 
 exports.deleteUser = (req, res, next) => {
-  if(req.token.userId !== req.params.id) {// If I am not owner then am I Admin ?
+  if(req.token.userId != req.params.id) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If I am not Admin => no access
@@ -155,13 +156,13 @@ exports.deleteUser = (req, res, next) => {
   .then(user => {
     if (user.imageUrl == null || user.imageUrl == "") {
       User.destroy({ where: { id: req.params.id } })
-      .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
+      .then(() => res.status(200).json({ message: "Utilisateur supprimé !"}))
     } else {
       const filename = user.imageUrl.split('/images/users/')[1];
       fs.unlink('images/users/' + filename, () => {
         User.destroy({ where: { id: req.params.id } })
-        .then(() => res.status(201).json({ message: "Utilisateur supprimé !"}))
-        // .catch(error => res.status(400).json({ error }));
+        .then(() => res.status(200).json({ message: "Utilisateur supprimé !"}))
+        .catch(error => res.status(400).json({ error }));
       });
     }
   })

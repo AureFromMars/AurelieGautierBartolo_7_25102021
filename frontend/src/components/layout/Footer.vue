@@ -1,5 +1,5 @@
 <template>
-  <div class="background-color d-flex flex-column py-4">
+  <div id="footer" class="background-color d-flex flex-column py-4">
     <div class="d-flex flex-row flex-wrap justify-content-center small">
       <router-link class="text-white mx-3 mb-2" :to="{ name: 'home'}">Vie privée</router-link>
       <router-link class="text-white mx-3 mb-2" :to="{ name: 'home'}">Mentions légales</router-link>

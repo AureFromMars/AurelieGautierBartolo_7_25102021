@@ -25,8 +25,8 @@ exports.createMessage = (req, res, next) => {
       ...req.body,
       userId: req.token.userId,
     })
-    .then(() => res.status(201).json({ message: "Message enregistré !"}))// Revoir si je laisse les données de la requête ou le message perso ############################################
-    .catch(error => res.status(400).json({ error }));// Recode the number #################################################
+    .then(() => res.status(201).json({ message: "Message enregistré !"}))
+    .catch(error => res.status(400).json({ error }));
   }
 };
 
@@ -38,14 +38,14 @@ exports.getAllMessages = (req, res, next) => {
       { model : Liking }
     ]
   })
-  .then((messages) => res.status(200).json(messages))// Callback that returns the promise
-  .catch(error => res.status(400).json({ error }));// Callback error
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(400).json({ error }));
 };
 
 exports.getAllMessagesFromUser = (req, res, next) => {
   Message.findAll({ where: {userId: req.token.userId} })
-  .then((messages) => res.status(200).json(messages))// Callback that returns the promise
-  .catch(error => res.status(400).json({ error }));// Callback error
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(400).json({ error }));
 };
 
 exports.getOneMessage = (req, res, next) => {
@@ -57,50 +57,61 @@ exports.getOneMessage = (req, res, next) => {
       { model: Liking}
     ]
   })
-  .then((messages) => res.status(200).json(messages))// Callback that returns the promise
-  .catch(error => res.status(400).json({ error }));// Callback error
+  .then((messages) => res.status(200).json(messages))
+  .catch(error => res.status(400).json({ error }));
 };
 
 exports.modifyMessage = (req, res, next) => {
-  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
-    User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
-    .then((user) => {
-      if (!user.isAdmin) {// If not Admin => no access
-        res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce message."});
-        return ;
-      };
-    })
-  };
-  Message.findOne({where : { id: req.body.id}})
-  .then(message => {
     if (req.file) {
-      const messageObject = {
-        ...JSON.parse(req.body.message),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/messages/${req.file.filename}`
+      req.body.message = JSON.parse(req.body.message)
+      if(req.token.userId != req.body.message.userId) {// If I am not owner then am I Admin ?
+        User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
+        .then((user) => {
+          if (!user.isAdmin) {// If not Admin => no access
+            res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce message."});
+            return ;
+          };
+        })
       };
-      if (message.imageUrl == null || message.imageUrl == "") {
-        Message.update(messageObject,{ where: { id: req.body.id } })
-        .then(() => res.status(200).json({ message: "Message modifié !"}))
-        .catch(error => res.status(400).json({ error }));
-      } else {
-        const filename = message.imageUrl.split('/images/messages/')[1];
-        fs.unlink('images/messages/' + filename, () => {
-          Message.update(messageObject,{ where: { id: req.body.id } })
-          .then(() => res.status(200).json({ message: "Message modifié !"}))
+      Message.findOne({where : { id: req.body.message.id}})
+      .then(message => {
+        const messageObject = {
+          ...req.body.message,
+          imageUrl: `${req.protocol}://${req.get('host')}/images/messages/${req.file.filename}`
+        };
+        if (message.imageUrl == null || message.imageUrl == "") {
+          Message.update(messageObject,{ where: { id: req.body.message.id } })
+          .then(() => res.status(201).json({ message: "Message modifié !"}))
           .catch(error => res.status(400).json({ error }));
-        });
-      }
+        } else {
+          const filename = message.imageUrl.split('/images/messages/')[1];
+          fs.unlink('images/messages/' + filename, () => {
+            Message.update(messageObject,{ where: { id: req.body.message.id } })
+            .then(() => res.status(201).json({ message: "Message modifié !"}))
+            .catch(error => res.status(400).json({ error }));
+          });
+        }
+      })
+      .catch(error => res.status(430).json({ error }));
     } else {
+      if(req.token.userId != req.body.userId) {// If I am not owner then am I Admin ?
+        User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
+        .then((user) => {
+          if (!user.isAdmin) {// If not Admin => no access
+            res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce message."});
+            return ;
+          };
+        })
+      };
       Message.update(req.body,{ where: { id: req.body.id } })
-      .then(() => res.status(200).json({ message: "Message modifié !"}))
+      .then(() => res.status(201).json({ message: "Message modifié !"}))
       .catch(error => res.status(400).json({ error }));
     };
-  })
 };
 
 exports.deleteMessage = (req, res, next) => {
 
-  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
+  if(req.token.userId != req.body.userId) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If not Admin => no access
@@ -113,12 +124,12 @@ exports.deleteMessage = (req, res, next) => {
   .then(message => {
     if (message.imageUrl == null || message.imageUrl == "") {
       Message.destroy({ where: { id: req.body.id } })
-      .then(() => res.status(201).json({ message: "Message supprimé !"}))
+      .then(() => res.status(200).json({ message: "Message supprimé !"}))
     } else {
       const filename = message.imageUrl.split('/images/messages/')[1];
       fs.unlink('images/messages/' + filename, () => {
         Message.destroy({ where: { id: req.body.id } })
-        .then(() => res.status(201).json({ message: "Message supprimé !"}))
+        .then(() => res.status(200).json({ message: "Message supprimé !"}))
         .catch(error => res.status(400).json({ error }));
       });
     }

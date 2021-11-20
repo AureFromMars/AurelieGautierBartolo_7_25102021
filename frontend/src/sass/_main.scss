@@ -1,7 +1,4 @@
-@charset 'utf-8';// pour forcer l'encodage en cas de problème
-
-// @import "./global";
-// @import "./variables";
+@charset 'utf-8';// force to encode in case of problem
 
 $COLOR_PRIMARY: #BA4D55;
 $COLOR_SECONDARY: #FFD7D7;
@@ -12,18 +9,18 @@ $MEDIUM_GREY: #D4D4D4;
 $LIGHT_GREY: rgb(246, 246, 246);
 
 body {
-  color: $COLOR_TERTIARY;// A REVOIR OU CA IMPACTE ##############
+  color: $COLOR_TERTIARY;
 }
 
 h1 {
   color: $COLOR_TERTIARY;
-  margin-top: 10px;
   text-align: center;
 }
 
 h2 {
   color: $COLOR_PRIMARY;
   text-align: center;
+  margin: 0;
 }
 
 .primary-color {
@@ -43,7 +40,7 @@ h2 {
   color: white;
   border-color: none;
   background-color: $COLOR-TERTIARY;
-  font-size: 0.9em;
+  font-size: 0.8em;
   text-transform: uppercase;
 
   &:hover {
@@ -57,10 +54,13 @@ h2 {
 
   &-admin  {
     background-color: $COLOR-PRIMARY;
-    font-size: 0.7em;
-    // text-transform: uppercase;
   }
-};
+}
+
+.counter {
+  width: 35px;
+  height: 15px;
+}
 
 .nav-link {
   color: $COLOR_PRIMARY;
@@ -68,4 +68,8 @@ h2 {
   &:active, &:focus, &:hover {
     color: $COLOR-TERTIARY;
   }
+}
+
+.gap {
+  gap: 10px;
 }

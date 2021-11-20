@@ -1,61 +1,73 @@
 <template>
   <!-- Attention, v-if car infos non récupérées au départ avant chargement de message -->
-  <div v-if="message!==null" class="message-card rounded-3 bg-white m-auto p-2 p-sm-3 d-flex flex-column">
-    <div class="d-flex flex-row">
-      <div class="d-flex flex-column w-20">
-        <router-link :to="{name:'user', params: {id: this.message.userId}}" class="text-center w-30 text-decoration-none">
-          <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
-          <p class="text-decoration-none tertiary-color small fw-bold">{{ message.User.username }}</p>
-        </router-link>
-        <div v-if="displayAdminOrOwnerButtons" class="d-flex flex-column">
-          <div v-on:click="displayModifyMessage" class="btn btn-admin w-100 mb-2" title="Bouton de modification du message" type="button">Modifier</div>
-          <div v-on:click="deleteMessage" class="btn btn-admin w-100" title="Bouton de suppression du message" type="button">Supprimer</div>
-        </div>
-      </div>
-      <div class="d-flex flex-column w-100 ps-3">
-        <div class="d-flex flex-row flex-wrap justify-content-between">
-          <h6 class="tertiary-color">{{ message.title }}</h6>
-          <div class="d-flex flex-row flex-nowrap text-muted small">
-            <CounterLiking :messageId="message.id"/>
+  <div v-if="message !== null" id="message" class="h-100 w-100 d-flex flex-column gap">
+    <h1>Le message</h1>
+    <div class="page-container rounded-3 bg-white m-auto w-100 p-2 p-sm-3 d-flex flex-column">
+      <div class="page-container-message d-flex flex-row flex-wrap gap">
+        <div class="page-container-message-profile d-flex flex-column w-100">
+          <div class="m-auto">
+            <UserProfile :user="message.User"/>
+          </div>
+          <div v-if="displayAdminOrOwnerButtons" class="d-flex justify-content-center w-100 gap my-2">
+            <div v-on:click="displayModifyMessage" class="btn btn-admin" title="Bouton de modification du message" type="button">Modifier</div>
+            <div v-on:click="deleteMessage" class="btn btn-admin" title="Bouton de suppression du message" type="button">Supprimer</div>
           </div>
         </div>
-        <p class="small">{{ createdDate }}</p>
-        <p>{{ message.content }}</p>
+        <div class="page-container-form m-auto w-100 d-flex flex-column justify-content-center" v-if="displayModifyForm">
+          <h2>Modifier le message</h2>
+          <form id="modify-message" class="d-flex flex-column gap" v-on:submit.prevent="requestSelectorFileOrNot">
+            <div class="form-group d-flex flex-column">
+              <label for="new-title">Titre du message</label>
+              <input v-model="newTitle" id="new-title" name="new-title" class="form-control" maxlength="255" placeholder="Saisissez un titre (maximum 255 caractères)..." />
+            </div>
+            <div class="form-group d-flex flex-column">
+              <label for="new-content">Contenu du message</label>
+              <textarea v-model="newContent" id="new-content" name="new-content" rows="5" class="form-control h-300" placeholder="Saisissez le contenu de votre message..." />
+            </div>
+            <div class="form-group d-flex flex-row flex-wrap jusitfy-content-between w-100 gap">
+              <input v-on:change="handleFileUpload" class="m-auto d-flex flex-row flex-wrap" type="file" accept="image/*" id="file" name="Ajouter une image" title="Ajouter une image" />
+              <div class="d-flex flex-wrap flex-row gap m-auto">
+                <button type="submit" name="submit" class="btn" title="Enregistrer un nouveau message">Enregistrer</button>
+                <button v-on:click="displayModifyMessage" name="reset" class="btn btn-admin" title="Annuler la modification du commentaire">Annuler</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="page-container-message-content d-flex flex-row flex-wrap my-auto w-100 gap">
+          <div class="page-container-message-content-top d-flex flex-row justify-content-between gap w-100">
+            <h2 class="message-title tertiary-color">{{ message.title }}</h2>
+            <CounterLiking :messageId="message.id"/>
+          </div>
+          <div class="page-container-message-content-bottom d-flex flex-column w-100 gap">
+            <p class="page-container-message-content-date small m-0">{{ createdDate }}</p>
+            <img class="page-container-message-content-image" v-if="this.message.imageUrl" :src="this.message.imageUrl" alt="Image utilisateur"/>
+            <p class="page-container-message-content-text">{{ message.content }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div v-if="displayModifyForm">
-      <form v-on:submit.prevent="modifyMessage" class="p-2 p-sm-3">
-        <div class="form-group my-2 d-flex flex-column">
-          <label for="new-title">Titre du message</label>
-          <input v-model="message.title" id="new-title" name="new-title" class="form-control" placeholder="Saisissez un titre court..." />
+      <h2>Les commentaires</h2>
+      <div class="gap mt-4 d-flex flex-wrap justify-content-center w-100">
+        <AddComment v-on:newCommentEvent="getAllComments" />
+      </div>
+      <div v-if="comments" class="d-flex flex-column flex-nowrap h-100 h-100 w-100 p-0">
+        <h3 class="text-center mt-4 mb-0">Tous les commentaires</h3>
+        <nav class="nav nav-pills d-flex flex-row justify-content-end h-100 text-center small h-100 w-100 p-0">
+            <p class="my-auto pe-3">Tri par date</p>
+            <div class="my-auto d-flex flex-column h-100">
+              <div v-on:click="orderCrescent = true" class="m-auto" title="Du plus ancien au plus récent" type="button"><i class="tertiary-color fas fa-caret-up mb-"></i></div>
+              <div v-on:click="orderCrescent = false" class="m-auto" title="Du plus récent au plus ancien" type="button"><i class="tertiary-color fas fa-caret-down"></i></div>
+            </div>
+        </nav>
+        <div class="gap d-flex flex-wrap justify-content-center">
+          <hr/>
+          <CardComment class="hr"
+            v-for="(comment) in orderedComments" 
+            v-on:newCommentEvent="getAllComments"
+            :key="comment.id"
+            :comment="comment"
+          />
         </div>
-        <div class="form-group my-2 d-flex flex-column">
-          <label for="new-content">Contenu du message</label>
-          <textarea v-model="message.content" id="new-content" name="new-content" class="form-control" placeholder="Saisissez le contenu de votre message..." />
-        </div>
-        <div class="add-message-buttons form-group my-2 d-flex flex-row">
-          <!-- <button v-on:click="uploadMessagePicture" name="upload" class="btn btn-primary" title="Ajouter une image">Ajouter un image</button> -->
-          <button type="submit" name="submit" class="btn" title="Enregistrer un nouveau message">Enregistrer le message</button>
-        </div>
-      </form>
-    </div>
-    <div class="message-cards d-flex flex-wrap justify-content-center">
-      <AddComment v-on:newCommentEvent="getAllComments" />
-    </div>
-    <nav class="nav nav-pills d-flex flex-row justify-content-end h-100 text-center small h-100 w-100 p-0">
-        <p class="my-auto pe-3">Tri par date</p>
-        <div class="my-auto d-flex flex-column h-100">
-          <div v-on:click="orderCrescent = true" class="m-auto" title="Du plus ancien au plus récent" type="button"><i class="tertiary-color fas fa-caret-up mb-"></i></div>
-          <div v-on:click="orderCrescent = false" class="m-auto" title="Du plus récent au plus ancien" type="button"><i class="tertiary-color fas fa-caret-down"></i></div>
-        </div>
-    </nav>
-    <div class="message-cards d-flex flex-wrap justify-content-center">
-      <CardComment
-        v-for="(comment) in orderedComments" 
-        v-on:newCommentEvent="getAllComments"
-        :key="comment.id"
-        :comment="comment"
-      />
+      </div>
     </div>
   </div>
 </template>
@@ -68,13 +80,15 @@ import CounterLiking from "../helpers/CounterLiking"
 import AddComment from '../comments/AddComment.vue'
 import CardComment from '../comments/CardComment.vue'
 import LogoutService from '../services/LogoutService'
+import UserProfile from '../helpers/UserProfile'
 
 export default {
   name: 'Message',
   components: {
     AddComment,
     CardComment,
-    CounterLiking
+    CounterLiking,
+    UserProfile
   },
   data() {
     return {
@@ -82,7 +96,9 @@ export default {
       comments: null,
       displayAdminOrOwnerButtons: false,
       displayModifyForm: false,
-      orderCrescent: false
+      orderCrescent: false,
+      newTitle: "",
+      newContent: ""
     }
   },
   computed: {
@@ -157,26 +173,60 @@ export default {
       }
     },
     displayModifyMessage: function() {
-      this.displayModifyForm = !this.displayModifyForm
+      this.newTitle = this.message.title;
+      this.newContent = this.message.content;
+      this.file = null;
+      this.displayModifyForm = !this.displayModifyForm;
     },
     modifyMessage: function () {
       MessageDataService.modify(this.$route.params.id, {
         id: this.message.id,
         userId: this.message.userId,
-        title : this.message.title,
-        content : this.message.content,
-        imgUrl : this.message.imgUrl
+        title: this.newTitle,
+        content: this.newContent
       })
       .then(() => {
-        this.displayModifyForm = !this.displayModifyForm
+        this.displayModifyForm = !this.displayModifyForm;
+        this.message.title = this.newTitle;
+        this.message.content = this.newContent;
       })
       .catch(error => {
         console.log("error : ", error);
         if (error.response.status === 401) {LogoutService()}
       })
     },
+    handleFileUpload( event ){
+      this.file = event.target.files[0]
+      console.log('this.file : ', this.file);
+    },
+    modifyMessageWithFile: function () {
+      let formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("message", JSON.stringify({
+        id: this.message.id,
+        userId: this.message.userId,
+        title : this.newTitle,
+        content : this.newContent
+      }))
+      MessageDataService.modify(this.$route.params.id, formData)
+      .then(() => {
+        this.displayModifyForm = !this.displayModifyForm;
+        this.getOneMessage();
+      })
+      .catch(error => {
+        console.log("error : ", error);
+        if (error.response.status === 401) {LogoutService()}
+      })
+    },
+    requestSelectorFileOrNot: function () {
+      if (this.file != null) {
+        this.modifyMessageWithFile()
+      } else {
+        this.modifyMessage()
+      }
+    },
     deleteMessage: function() {
-      if(confirm("Vous-vous vraiment supprimer ce message ?")){
+      if(confirm("Voulez-vous vraiment supprimer ce message ?")){
         
         MessageDataService.delete(this.$route.params.id, {
           data: {
@@ -201,4 +251,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.message-title {
+  font-size: 1.4em;
+  text-align: left;
+}
+.page-container {
+  &-message {
+    &-image {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+.hr {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
 </style>

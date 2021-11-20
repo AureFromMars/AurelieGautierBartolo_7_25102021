@@ -17,10 +17,6 @@
       <div class="form-group my-2 d-flex flex-column text-center">
         <label for="file" class="form-label">Image de profil</label>
         <div class="d-flex flex-wrap flex-row justify-content-center">
-          <!-- <label for="file-upload" class="file-upload">
-              <input v-on:change="handleFileUpload" type="file" accept="image/*" id="file-upload" name="Bouton de chargement de l'image de profil (optionnel)" title="Bouton de chargement de l'image de profil (optionnel)" />
-              Label
-          </label> -->
           <input v-on:change="handleFileUpload" type="file" accept="image/*" id="file" name="Bouton de chargement de l'image de profil (optionnel)" title="Bouton de chargement de l'image de profil (optionnel)" />
         </div>
       </div>
@@ -36,7 +32,6 @@
 </template>
 
 <script>
-// import Registered from '@/components/notifications/Registered.vue' // @ if succeed to replace src folder
 import { requestWithoutAuth } from '../../http-common' // If want to store base URL and headers, else import axios directly
 import { requestWithoutAuthWithFile } from '../../http-common' // If want to store base URL and headers, else import axios directly
 
@@ -57,46 +52,38 @@ export default {
     checkUsername: function () {
       if (this.username === ""){
         this.errorMessage += "- vous n'avez pas renseigné votre nom d'utilisateur.\n";
-        // this.username.className += ' is-invalid';
         return false;
       }
       else if (!(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/.test(this.username))) {// Mettre le regex à l'intérieur de /^ +$/
         this.errorMessage += "- vous avez un caractère invalide dans votre nom d'utilisateur.\n";
-        // this.username.className += ' is-invalid';
         return false;
       }
-      // this.username.classList.remove('is-invalid');
       return true;
     },
     checkEmail: function () {
       if (this.email === ""){
         this.errorMessage += "- vous n'avez pas renseigné votre Adresse Email.\n";
-        // email.className += ' is-invalid';
         return false;
       }
       else if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.email))) {
         this.errorMessage += "- le format de votre Email n'est pas valide.\n"
-        // email.className += ' is-invalid';
         return false;
       }
-      // email.classList.remove('is-invalid');
       return true;
     },
     checkPassword: function() {
       if (this.password === ""){
         this.errorMessage += "- vous n'avez pas renseigné votre Adresse.\n";
-        // password.className += ' is-invalid';
         return false;
       }
       else if (!(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/.test(this.password))) {
         this.errorMessage += "- vous avez un caractère invalide dans votre Adresse.\n";
-        // password.className += ' is-invalid';
         return false;
       }
-      // password.classList.remove('is-invalid');
       return true;
     },
     register: function () {
+      this.errorMessage=""
       this.checkUsername();
       this.checkEmail();
       this.checkPassword();
@@ -116,14 +103,25 @@ export default {
         const data = await response.data;
         if(response) {
           console.log("data : ", data);
+          this.$toast.success('Vous vous êtes bien enregistré !', 'Bravo !');
           this.$router.push({ name: 'login' });
         } else {
           const error = data.message;
           return Promise.reject(error);
         }
       })
-      .catch(error => {
-        console.log("error : ", error);
+      .catch(async error => {
+        if ( await error.response.status == 409 ) {
+          for (let i=0 ; i<error.response.data.errors.length ; i++) {
+            if ( error.response.data.errors[i] == 'Bad request, your email is not valid!' ) {
+              this.$toast.error("Votre email ne respecte pas un format d'email valide.", 'ERREUR');
+            } else if ( error.response.data.errors[i] == 'Bad request, your password is not valid!' ) {
+              this.$toast.error("Votre mot de passe n'est pas valide : 8 à 100 caractères, au moins 1 minuscule, au moins 1 majuscule, au moins 1 chiffre et sans espace.", 'ERREUR')
+            } else if( error.response.data.errors[i] == 'Bad request, your username is already used!' ) {
+              this.$toast.error("Votre nom d'utilisateur n'est pas valide : de 5 à 30 caractères, aucuns caractéres spéciaux.", 'ERREUR')
+            }
+          }
+        }
       })
     },
     handleFileUpload( event ){
@@ -131,13 +129,14 @@ export default {
       console.log('this.file : ', this.file);
     },
     registerWithFile: function () {
+      this.errorMessage=""
       this.checkUsername();
       this.checkEmail();
       this.checkPassword();
 
-      if (this.errorMessage != "") {// FAIRE ?????????????????????? ###############################
+      if (this.errorMessage != "") {
         alert(this.explainErrorMessage + this.errorMessage);
-        return false;// Arrêter la fonction
+        return false;
       }
       let formData = new FormData();
       formData.append("file", this.file);
@@ -147,7 +146,6 @@ export default {
         password : this.password,
         bio : this.bio        
       }))
-      console.log('formData : ', formData);
       requestWithoutAuthWithFile().post('user/register', formData)
       .then( async response => {
         console.log('response.data : ', response.data)
@@ -162,6 +160,8 @@ export default {
       })
       .catch(error => {
         console.log("error : ", error);
+
+        console.log("JESUISICI");
       })
     },
     requestSelectorFileOrNot: function () {
@@ -175,6 +175,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 </style>

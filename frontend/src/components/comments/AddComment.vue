@@ -1,15 +1,13 @@
 <template>
-  <div class="message-card rounded-3 bg-white">
-    <div class="p-2 p-sm-3 d-flex flex-column">
+  <div id="add-comment" class="m-auto rounded-3 bg-white">
+    <div class="d-flex flex-column">
       <h3>Ajouter un nouveau commentaire</h3>
-      <form v-on:submit.prevent="addComment" class="p-2 p-sm-3">
-        <div class="form-group my-2 d-flex flex-column">
-          <label for="new-content">Contenu du message</label>
-          <textarea v-model="content" id="new-content" name="new-content" placeholder="Saisissez le contenu de votre message..." />
-        </div>
-        <div class="add-message-buttons form-group my-2 d-flex flex-row">
-          <button type="submit" name="submit" class="btn" title="Enregistrer un nouveau commentaire">Enregistrer le commentaire</button>
-        </div>
+      <form v-on:submit.prevent="addComment" class="my-2 d-flex flex-column gap">
+          <div class="form-group d-flex flex-column">
+            <label for="new-content">Contenu du message</label>
+            <textarea v-model="content" class="form-control" id="new-content" rows="3" name="new-content" placeholder="Saisissez le contenu de votre message..." />
+          </div>
+          <button type="submit" name="submit" class="btn" title="Enregistrer un nouveau commentaire">Enregistrer</button>
       </form>
     </div>
   </div>
@@ -46,7 +44,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.add-message-buttons {
-  gap: 10px;
-}
+
 </style>

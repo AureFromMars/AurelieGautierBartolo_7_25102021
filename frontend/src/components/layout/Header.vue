@@ -1,10 +1,12 @@
 <template>
-  <nav class="shadow-sm navbar navbar-expand-lg navbar-light d-flex flex-row flex-wrap justify-content-between ps-4 pe-5">
-    <router-link :to="{name:'home'}" class="navbar-brand my-auto">
-      <img src="../../assets/icon-left-font2.png" height=100 alt="Logo Groupomania" title="Page d'accueil d'Orinoco, votre meilleur site de vente en ligne" />
+  <nav id="header" class="shadow-sm navbar navbar-expand-lg navbar-light d-flex flex-row flex-wrap justify-content-between ps-1 pe-3">
+    <router-link :to="{name:'home'}" class="d-flex flex-row">
+      <div class="w-100 h-100">
+        <img class="m-auto w-100" id="logo" src="../../assets/icon-left-font.png" alt="Logo Groupomania" title="Page d'accueil d'Orinoco, votre meilleur site de vente en ligne" />
+      </div>
     </router-link>
     <div class="d-flex flex-row flex-nowrap justify-content-end ps-4 small">
-      <button class="navbar-toggler ms-2 min-h-300" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Bouton de navigation" title="Bouton de navigation">
+      <button class="navbar-toggler min-h-300" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Bouton de navigation" title="Bouton de navigation">
         <span class="navbar-toggler-icon"></span>
         Menu
       </button>
@@ -57,6 +59,7 @@ export default {
     myAccount: function () {
       if( !(this.$route.name == 'user' && this.$route.params.id == localStorage.getItem('userId')) ) {
         this.$router.push({ name: 'user', params: {id: localStorage.getItem('userId')} });
+        this.$router.go()
       }
     },
     displayAdminButton: function () {
@@ -69,4 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  #logo {
+    max-height: 100px;
+  }
 </style>

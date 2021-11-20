@@ -1,6 +1,6 @@
 <template>
   <div id="login" class="m-3">
-    <h2 class="text-center mt-5">Formulaire de connexion</h2>
+    <h2 class="text-center">Formulaire de connexion</h2>
     <form v-on:submit.prevent="login" class="d-flex flex-column justify-content-evenly align-center" method="post" id="login-form">
       <div class="form-group my-2">
         <label for="email">Adresse email<abbr title="Ce champ est obligatoire">*</abbr></label>
@@ -24,8 +24,6 @@ export default {
   name: 'Login',
   data() {
     return {
-      // explainErrorMessage: "Votre formulaire d'inscription comporte des erreurs.\nMerci de corriger les informations suivantes :\n\n",
-      // errorMessage: "",
       email: null,
       password: null
     }
@@ -58,5 +56,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

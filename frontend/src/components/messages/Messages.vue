@@ -1,24 +1,26 @@
 <template>
-  <div id="body" class="m-0 px-5 py-2 h-100 w-100 m-auto d-flex flex-column justify-content-between">
-    <div class="rounded-3 background-red h-100 d-flex flex-column">
+  <div id="messages" class="px-3 py-2 h-100 w-100 m-auto d-flex flex-column justify-content-between">
+    <div class="h-100 w-100 d-flex flex-column gap">
       <h1>Les messages</h1>
-      <div class="message-cards d-flex flex-wrap justify-content-center">
-        <AddMessage v-on:newMessageEvent="getAllMessages" />
-      </div>
+      <AddMessage v-on:newMessageEvent="getAllMessages" />
       <h2>Tous les messages</h2>
-      <nav class="nav nav-pills nav-gap-y-1 flex-row justify-content-end h-100 text-center small mt-3 mb-1">
+      <form class="d-flex flex-row flex-nowrap justify-content-center">
+        <input type="text" class="form-control" placeholder="Rechercher un message par le titre"/>
+        <button class="btn" type="button">Rechercher</button>
+      </form>
+      <nav class="gap d-flex flex-wrap flex-row justify-content-end h-100 text-center small">
         <router-link :to="{name:'users'}" class="nav-link py-0 m-auto">Les +<br />populaires</router-link>
         <router-link :to="{name:'users'}" class="nav-link py-0 m-auto">Les +<br />impopulaires</router-link>
         <router-link :to="{name:'users'}" class="nav-link py-0 m-auto">Les +<br />commentés</router-link>
-        <div class="d-flex flex-row flex-nowrap p-0 h-100 m-auto">
+        <div class="d-flex flex-row flex-nowrap p-0 m-auto">
           <p class="m-auto pe-3">Tri par<br />date</p>
-          <div class="m-auto d-flex flex-column flex-nowrap h-100">
-            <div v-on:click="orderCrescent = true" class="m-auto" title="Du plus ancien au plus récent" type="button"><i class="nav-link p-0 fas fa-caret-up mb-"></i></div>
-            <div v-on:click="orderCrescent = false" class="m-auto" title="Du plus récent au plus ancien" type="button"><i class="nav-link p-0 fas fa-caret-down"></i></div>
+          <div class="d-flex flex-column flex-nowrap m-auto">
+            <div v-on:click="orderCrescent = true" title="Du plus ancien au plus récent" type="button"><i class="nav-link p-0 fas fa-caret-up mb-"></i></div>
+            <div v-on:click="orderCrescent = false" title="Du plus récent au plus ancien" type="button"><i class="nav-link p-0 fas fa-caret-down"></i></div>
           </div>
         </div>
       </nav>
-      <div class="message-cards d-flex flex-wrap justify-content-center">
+      <div class="gap d-flex flex-column">
         <CardMessage
           v-for="message in orderedMessages"
           :key="message.id"
@@ -40,7 +42,7 @@ export default {
   name: 'Messages',
   components: {
     CardMessage,
-    AddMessage,
+    AddMessage
   },
   data() {
     return {
@@ -71,7 +73,7 @@ export default {
     },
   },
   methods: {
-    async getAllMessages() {
+    getAllMessages() {
       MessageDataService.getAll()
       .then(response => {
         this.messages = response.data;
@@ -89,18 +91,4 @@ export default {
 </script>
 
 <style lang="scss">
-.red-text {
-  color: #BA4D55;
-}
-.background-red {
-  background-color: #FFD7D7;
-}
-.message-cards {
-  gap: 10px;
-  margin: 20px 0;
-}
-.message-card {
-  width: 500px;
-}
-
 </style>

@@ -20,10 +20,7 @@ const requestAuth = () => {
 };
 const requestWithoutAuthWithFile = () => { 
   return axios.create({
-    baseURL: 'http://localhost:3001/api/',
-    headers: {
-      // 'Content-Type': 'multipart/form-data',
-    }
+    baseURL: 'http://localhost:3001/api/'
   })
 };
 
@@ -31,12 +28,10 @@ const requestAuthWithFile = () => {
   return axios.create({
     baseURL: 'http://localhost:3001/api/',
     headers: {
-      // 'Content-Type': 'multipart/form-data',
       'Authorization': "Bearer " + localStorage.getItem('token')
     }
   })
 };
-
 
 export {
   requestWithoutAuth,

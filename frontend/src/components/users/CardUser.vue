@@ -1,22 +1,22 @@
 <template>
-  <div class="user-card rounded-3 bg-white">
-    <div class="p-2 p-sm-3 d-flex flex-column justify-content-center">
-      <div class="user-card-top d-flex flex-column w-100 align-items-center">
-        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" width="50" alt="User" />
-        <div class="text-muted small">
-            <span class="d-none d-sm-inline-block"><i class="far fa-file-alt"></i> 19</span>
-            <span><i class="far fa-comment ms-2"></i> 3</span>
-        </div>
-        <h6>{{ user.username }}</h6>
+  <div id="card-user" class="rounded-3 bg-white">
+    <router-link :to="{name:'user', params: {id: this.user.id}}" class="p-3 d-flex flex-row justify-content-center text-decoration-none text-black">
+      <UserProfile :user="user" />
+      <div class="bio ms-2" v-if="user.bio">
+        <div class="bio-text">{{ user.bio }}</div>
       </div>
-      <p class="my-2">{{ user.bio }}</p>
-    </div>
+    </router-link>
   </div>
 </template>
 
 <script>
+import UserProfile from '../helpers/UserProfile.vue'
+
 export default {
   name: 'CardUser',
+  components: {
+    UserProfile
+  },
   props: {
     'user': {
       'username': String,
@@ -26,6 +26,23 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+#card-user {
+  max-width: 300px;
+}
+.bio {
+  & * {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  &-text {
+    font-size: 0.9em;
+    -webkit-line-clamp: 4;
+    max-height: 4 * 1.5em;
+  }
+  &:after {
+    font-size: 80%;
+    content: 'Lire la suite...';
+  }
+}
 </style>

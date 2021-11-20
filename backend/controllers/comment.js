@@ -36,15 +36,15 @@ exports.getOneComment = (req, res, next) => {
     ]
   })
   .then((messages) => res.status(200).json(messages))
-  .catch(error => res.status(404).json({ error }));
+  .catch(error => res.status(400).json({ error }));
 };
 
 exports.modifyComment = (req, res, next) => {
-  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
+  if(req.token.userId != req.body.userId) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If I am not Admin => no access
-        res.status(403).json({ message: "Vous n'êtes pas autorisé à modifier ce commentaire."});
+        res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier ce commentaire."});
         return ;
       };
     })
@@ -53,12 +53,12 @@ exports.modifyComment = (req, res, next) => {
 	.then(() => {
 		Comment.update(req.body,{ where: { id: req.body.id } })
 		.then(() => res.status(201).json({ message: "Commentaire modifié !"}))
-		.catch(error => res.status(470).json({ error }));
+		.catch(error => res.status(400).json({ error }));
 	})
 };
 
 exports.deleteComment = (req, res, next) => {
-  if(req.token.userId !== req.body.userId) {// If I am not owner then am I Admin ?
+  if(req.token.userId != req.body.userId) {// If I am not owner then am I Admin ?
     User.findOne({attributes: ['id', 'isAdmin'], where : { id: req.token.userId}})
     .then((user) => {
       if (!user.isAdmin) {// If I am not Admin => no access
@@ -70,7 +70,7 @@ exports.deleteComment = (req, res, next) => {
 	Comment.findOne({ where : { id: req.body.id} })
   .then(() => {
     Comment.destroy({where : { id: req.body.id }})
-    .then(() => res.status(201).json({ message: "Commentaire supprimé !"}))
-    .catch(error => res.status(410).json({ error }));
+    .then(() => res.status(200).json({ message: "Commentaire supprimé !"}))
+    .catch(error => res.status(400).json({ error }));
   })
 };

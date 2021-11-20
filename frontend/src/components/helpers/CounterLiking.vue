@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex flex-row flex-nowrap text-muted">
-    <form v-on:submit.prevent="addLike" class="d-flex ps-1 m-auto">
-      <button type="submit" name="submit" class="btn py-0 px-1 m-auto d-flex flex-row flex-nowrap h-100" title="Enregistrer un nouveau like">
+  <div id="counter-liking" class="gap d-flex flex-column flex-nowrap text-muted jusitfy-content-start">
+    <form v-on:submit.prevent="addLike" class="d-flex">
+      <button type="submit" name="submit" class="counter btn py-0 px-1 d-flex flex-row flex-nowrap h-100" title="Enregistrer un nouveau like">
         <i class="m-auto far fa-thumbs-up fa-sm"></i>
         <span class="m-auto ps-1 small">{{ this.like }}</span>
       </button>
     </form>
-    <form v-on:submit.prevent="addDislike" class="d-flex ps-1 m-auto">
-      <button type="submit" name="submit" class="btn py-0 px-1 m-auto d-flex flex-row flex-nowrap h-100" title="Enregistrer un nouveau like">
+    <form v-on:submit.prevent="addDislike" class="d-flex">
+      <button type="submit" name="submit" class="counter btn py-0 px-1 m-auto d-flex flex-row flex-nowrap h-100" title="Enregistrer un nouveau like">
         <i class="m-auto far fa-thumbs-down fa-sm"></i>
         <span class="m-auto ps-1 small">{{ this.dislike }}</span>
       </button>
@@ -162,7 +162,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-
 </style>
