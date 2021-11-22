@@ -1,34 +1,9 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/node
-# Edit at https://www.toptal.com/developers/gitignore?templates=node
+# Created by https://www.toptal.com/developers/gitignore/api/node,dotenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=node,dotenv
 
-### PACKAGES
-package-lock.json
-package.json
-
-### Defined by Vue.js
-.DS_Store
-node_modules
-/dist
-
-# local env files
-.env.local
-.env.*.local
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+### dotenv ###
+.env
 
 ### Node ###
 # Logs
@@ -103,7 +78,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
 .env.test
 .env.production
 
@@ -160,4 +134,4 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# End of https://www.toptal.com/developers/gitignore/api/node
+# End of https://www.toptal.com/developers/gitignore/api/node,dotenv
