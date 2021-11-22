@@ -61,16 +61,20 @@ ATTENTION, depuis novembre 2021, github communique par protocole SSH !
 - lien SSH : [git@github.com:AureFromMars/AurelieGautierBartolo_7_25102021.git](git@github.com:AureFromMars/AurelieGautierBartolo_7_25102021.git)
 - lien HTTPS : [https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021.git](https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021.git)
 
-### 1. Installer le serveur Nodemon
+## 1. Créer un fichier avec les variables d'environnement  
+- A la racine du backend, renommer le fichier ".env.example" en ".env"
+- Renseigner les variables d'environnement avec les données que vous souhaitez
+
+## 2. Installer le serveur Nodemon
 ```
 npm install -g nodemon
 ```
-### 2. Installer le framework Express
+## 3. Installer le framework Express
 [Documentation](http://expressjs.com/fr/)
 ```
 npm install express
 ```
-### 3. Installer l'e 'ORM (Object Relational Mapping) Sequelize MySQL server
+## 4. Installer l'ORM (Object Relational Mapping) Sequelize MySQL server
 [Documentation](https://www.npmjs.com/package/sequelize)
 - Installer Sequelize
 ```
@@ -80,11 +84,11 @@ npm install sequelize
 ```
 npm install -dev sequelize-cli
 ```
-### 4. Installer les packages supplémentaires du projet
+## 5. Installer les packages supplémentaires du projet
 ```
 npm install dotenv cors morgan bcrypt crypto-js email-validator password-validator jsonwebtoken multer
 ```
-### 5. Installer MySQL Server
+## 6. Installer MySQL Server
 - Installer MySQL :  
 https://dev.mysql.com/downloads/installer/ > version community (le second)  
 [How to install MySQL community server on Debian](https://linuxconfig.org/how-to-install-mysql-community-server-on-debian-9-stretch-linux)
@@ -96,13 +100,19 @@ sudo apt install mysql-community-server
 ```
 sequelize model:create --name Groupomania --attributes "name:string, text:text, url:string"
 ```
-### 6. Lancer le serveur Nodemon
+## 7. Lancer le serveur Nodemon
 - Remplacer node par nodemon à package.json, et l'exécuter avec npm run start
 - Lancer le script de lancement du serveur
 ```
 npm run start
 ```
-### 7. Utiliser le serveur MySQL
+- Une fois le serveur lancé, merci de commenter les lignes 19 à 21 suivantes dans le fichier backend app.js
+```
+db.sequelize.sync({alter: true, force: true}).then(() => {
+  console.log("Drop and re-sync db.");
+});
+```
+## 8. Utiliser le serveur MySQL
 - Lancer MySQL Server depuis le backend
 ```
 mysql -u root -proot

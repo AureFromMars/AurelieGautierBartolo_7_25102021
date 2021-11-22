@@ -30,8 +30,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-
-
 ### Node ###
 # Logs
 logs

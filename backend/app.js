@@ -16,9 +16,9 @@ const app = express();// bodyParser included since Express 4.16.0 and called wit
 /*************** DB ***************/
 const db = require("./models");
 // Above to activate to resync DB
-// db.sequelize.sync({alter: true, force: true}).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+db.sequelize.sync({alter: true, force: true}).then(() => {
+  console.log("Drop and re-sync db.");
+});
 
 app.use(morgan('dev'));
 app.use(cors());
