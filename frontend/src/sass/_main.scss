@@ -39,7 +39,7 @@ h2 {
   max-width: 130px;
   color: white;
   border-color: none;
-  background-color: $COLOR-TERTIARY;
+  background-color: $COLOR_TERTIARY;
   font-size: 0.8em;
   text-transform: uppercase;
 
@@ -53,7 +53,7 @@ h2 {
   }
 
   &-admin  {
-    background-color: $COLOR-PRIMARY;
+    background-color: $COLOR_PRIMARY;
   }
 }
 
@@ -63,10 +63,10 @@ h2 {
 }
 
 .nav-link {
-  color: $COLOR_PRIMARY;
+  color: $COLOR_TERTIARY;
 
   &:active, &:focus, &:hover {
-    color: $COLOR-TERTIARY;
+    color: $COLOR_PRIMARY;
   }
 }
 

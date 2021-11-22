@@ -17,11 +17,11 @@
         <form v-on:submit.prevent="requestSelectorFileOrNot" class="p-2 p-sm-3 w-100">
           <div class="form-group my-2 d-flex flex-column w-100">
             <label for="new-username">Nom d'utilisateur</label>
-            <input v-model="newUsername" id="new-username" name="new-username" class="form-control" placeholder="BLABLABLABLA..." />
+            <input v-model="newUsername" id="new-username" name="new-username" class="form-control" placeholder="Votre nom d'utilisateur..." />
           </div>
           <div class="form-group my-2 d-flex flex-column">
             <label for="new-bio">Bio</label>
-            <textarea v-model="newBio" id="new-bio" name="new-bio" rows="5" class="form-control h-300" placeholder="BLABLABLABLA..." />
+            <textarea v-model="newBio" id="new-bio" name="new-bio" rows="5" class="form-control h-300" placeholder="Présentez vous en quelques lignes..." />
           </div>
           <div class="form-group my-2 mx-auto d-flex flex-row justify-content-center">
             <label for="new-file" class="form-label me-2">Image de profil</label>

@@ -1,5 +1,5 @@
 // Imports
-const express = require('express');// Express frameword that allow to build web apps with Node.js
+const express = require('express');// Express framework that allows to build web apps with Node.js
 const Sequelize = require('sequelize');
 const morgan = require('morgan');// Morgan to have logs about HTTP middleware requests
 const userRouter = require('./routes/user');// Registration route

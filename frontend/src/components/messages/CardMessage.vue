@@ -1,5 +1,5 @@
 <template>
-  <div id="card-message" class="card-container w-100 m-auto gap d-flex flex-row flex-wrap jusitfy-content-between rounded-3 bg-white p-3">
+  <div id="card-message" class="card-container m-0 w-100 gap d-flex flex-row flex-wrap justify-content-between rounded-3 bg-white p-3">
     <UserProfile :user="message.User" v-if="this.$route.name != 'user'" class="user-profile"/>
     <div class="card-container-content d-flex flex-row flex-wrap mx-auto gap">
       <router-link class="card-container-content-message mx-auto w-100 text-decoration-none text-black" :to="{name:'message', params: {id: this.message.id}}">
@@ -49,6 +49,7 @@ export default {
 <style lang="scss" >
 
 .card-container {
+
   &-content {
     flex: 1 1 80%;
 

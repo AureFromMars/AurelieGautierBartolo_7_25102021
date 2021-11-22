@@ -4,11 +4,11 @@
     <form v-on:submit.prevent="requestSelectorFileOrNot" class="p-2 p-sm-3">
       <div class="form-group my-2 d-flex flex-column">
         <label for="new-title">Titre du message</label>
-        <input v-model="title" id="new-title" name="new-title" class="form-control" maxlength="255" placeholder="Saisissez un titre (maximum 255 caractères)..." required/>
+        <input v-model="title" id="new-title" name="new-title" class="form-control" maxlength="255" placeholder="Le titre (max. 255 caractères)..." required/>
       </div>
       <div class="form-group my-2 d-flex flex-column">
         <label for="new-content">Contenu du message</label>
-        <textarea v-model="content" id="new-content" name="new-content" rows="5" class="form-control h-300" placeholder="Saisissez le contenu de votre message..." required/>
+        <textarea v-model="content" id="new-content" name="new-content" rows="5" class="form-control h-300" placeholder="Le contenu de votre message..." required/>
       </div>
       <div class="gap add-message-buttons form-group my-2 d-flex flex-row flex-wrap justify-content-between">
         <input v-on:change="handleFileUpload" type="file" accept="image/*" id="file" name="Ajouter une image" title="Ajouter une image" />

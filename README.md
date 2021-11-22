@@ -1,7 +1,7 @@
 # AurelieGautierBartolo_7_25102021
-Ce repository est celui du projet 7 du parcours OpenClassrooms Développeur Web.  
+Ce repository est celui du projet 7 du parcours OpenClassrooms Développeur Web, accesssible publiquement sur github.com en suivant le lien suivant : [https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021](https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021)  
   
-Mission : Créer un réseau social d'entreprise
+## Mission : Créer un réseau social d'entreprise
   
 ## Compétences évaluées
 - Authentifier un utilisateur et maintenir sa session
@@ -15,7 +15,8 @@ La directrice, Stéphanie, invite toute l'agence à prendre un verre pour célé
 Le client en question est Groupomania, un groupe spécialisé dans la grande distribution et l'un des plus fidèles clients de l'agence.  
 Le projet consiste à construire un réseau social interne pour les employés de Groupomania. Le but de cet outil est de faciliter les interactions entre collègues. Le département RH de Groupomania a laissé libre cours à son imagination pour les fonctionnalités du réseau et a imaginé plusieurs briques pour favoriser les échanges entre collègues.
   
-### Exigences client
+### Exigences client  
+[Spécifications fonctionnelles](https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P7/Groupomania_Specs_FR_DWJ_VF.pdf)
 - Présentation des fonctionnalités simple
 - Création de compte simple et possible depuis mobile
 - Profil avec peu d'informations pour complétion rapide
@@ -26,8 +27,8 @@ Le projet consiste à construire un réseau social interne pour les employés de
 - Modération des interactions par le ou la chargé-e de communication
   
 ### Fonctionnalités à intégrer
-- 9GAG : les employés partagent et commentent les gifs
-- Reddit : les employés écrivent et/ou partagent des articles sur des sujets qui les intéressent
+- [9GAG](https://9gag.com/) : les employés partagent et commentent les gifs
+- [Reddit](https://www.reddit.com/) : les employés écrivent et/ou partagent des articles sur des sujets qui les intéressent
   
 ### Précisions sur la mission
 - Réaliser un MPV avec une seule des deux fonctionnalités proposées
@@ -54,11 +55,11 @@ Outils prérequis :
 - Commandes de base sous linux
 - Node.js
 
-## Installation du backend avec Node.js  
+# Installation du backend avec Node.js  
   
 ATTENTION, depuis novembre 2021, github communique par protocole SSH !
-- lien SSH : git@github.com:AureFromMars/AurelieGautierBartolo_7_25102021.git
-- lien HTTPS : https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021.git
+- lien SSH : [git@github.com:AureFromMars/AurelieGautierBartolo_7_25102021.git](git@github.com:AureFromMars/AurelieGautierBartolo_7_25102021.git)
+- lien HTTPS : [https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021.git](https://github.com/AureFromMars/AurelieGautierBartolo_7_25102021.git)
 
 ### 1. Installer le serveur Nodemon
 ```
@@ -69,7 +70,7 @@ npm install -g nodemon
 ```
 npm install express
 ```
-### 3. Installer le SGBD (Système de Gestion de Bases de Données) Sequelize MySQL server
+### 3. Installer l'e 'ORM (Object Relational Mapping) Sequelize MySQL server
 [Documentation](https://www.npmjs.com/package/sequelize)
 - Installer Sequelize
 ```
@@ -84,13 +85,14 @@ npm install -dev sequelize-cli
 npm install dotenv cors morgan bcrypt crypto-js email-validator password-validator jsonwebtoken multer
 ```
 ### 5. Installer MySQL Server
-- Installer MySQL : https://dev.mysql.com/downloads/installer/ > version community (le second)
+- Installer MySQL :  
+https://dev.mysql.com/downloads/installer/ > version community (le second)  
 [How to install MySQL community server on Debian](https://linuxconfig.org/how-to-install-mysql-community-server-on-debian-9-stretch-linux)
 ```
 sudo apt update
 sudo apt install mysql-community-server
 ```
-- Créer un fichier de migration pour permettre des changements d'état de DB et configurer les allez-retours
+- Créer un fichier de migration pour permettre des changements d'état de DB et configurer les allers-retours
 ```
 sequelize model:create --name Groupomania --attributes "name:string, text:text, url:string"
 ```
@@ -101,7 +103,7 @@ sequelize model:create --name Groupomania --attributes "name:string, text:text, 
 npm run start
 ```
 ### 7. Utiliser le serveur MySQL
-- Lancer MySQL Server
+- Lancer MySQL Server depuis le backend
 ```
 mysql -u root -proot
 ```
@@ -116,19 +118,21 @@ SELECT * FROM Message;
 SELECT * FROM Comment;
 SELECT * FROM Liking;
 ```
-- Ajouter des droits d'administration à un utilisateur cible (remplacer 14 par l'id ciblé)
+- Ajouter des droits d'administration à un utilisateur cible (remplacer userId par l'id ciblé)
 ```
-UPDATE User SET isAdmin = true where id= 14;
+UPDATE User SET isAdmin = true where id= userId;
 ```
-## Installation du frontend  
+# Installation du frontend avec Vue.js  
 ```
 npm install -g @vue/cli
 ```
 - Se rendre dans le repository
 - Se diriger vers le frontend
 - Installer Vue.js (choisir version 2)
+```
 npm install vue
-- Installer les packages
+```
+- Installer les packages supplémentaires nécessaires au projet
 ```
 npm install vue-router sass sass-loader@^10.2.0 bootstrap axios izitoast
 ```

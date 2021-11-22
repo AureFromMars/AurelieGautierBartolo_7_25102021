@@ -10,7 +10,7 @@
           />
       </div>
     </div>
-    <div id="page-change" class="small text-end primary-color">Changement de page</div>
+    <div id="page-change" class="small text-end nav-link">Changement de page</div>
   </div>
 </template>
 

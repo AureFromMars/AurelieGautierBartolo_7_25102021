@@ -4,15 +4,15 @@
     <form  v-on:submit.prevent="requestSelectorFileOrNot" id="userRegisterForm" name="userRegisterForm" class="d-flex flex-column justify-content evenly" method="post">
       <div class="form-group my-2">
         <label for="username" class="form-label">Nom d'utilisateur<abbr title="Ce champ est obligatoire">*</abbr></label>
-        <input v-model="username" id="username" name="username" class="form-control text-uppercase" title="Votre nom d'utilisateur (obligatoire)" placeholder="Veuillez renseigner votre nom d'utilisateur..." type="text" required />
+        <input v-model="username" id="username" name="username" class="form-control" title="Votre nom d'utilisateur (obligatoire)" placeholder="Votre nom d'utilisateur (max. 30 caractères)..." type="text" required />
       </div>
       <div class="form-group my-2">
         <label for="email" class="form-label">Adresse email<abbr title="Ce champ est obligatoire">*</abbr></label>
-        <input v-model="email" id="email" name="email" class="form-control" title="Adresse email de l'utilisateur (obligatoire)" placeholder="Veuillez renseigner une adresse email valide..." type="email" required />
+        <input v-model="email" id="email" name="email" class="form-control" title="Adresse email de l'utilisateur (obligatoire)" placeholder="Une adresse email valide..." type="email" required />
       </div>
       <div class="form-group my-2">
         <label for="password" class="form-label">Mot de passe<abbr title="Ce champ est obligatoire">*</abbr></label>
-        <input v-model="password" id="password" name="password" class="form-control" title="Mot de passe de l'utilisateur (obligatoire)" placeholder="Veuillez saisir votre mot de passe..." type="text" required />
+        <input v-model="password" id="password" name="password" class="form-control" title="Mot de passe de l'utilisateur (obligatoire)" placeholder="Votre mot de passe..." type="text" required />
       </div>
       <div class="form-group my-2 d-flex flex-column text-center">
         <label for="file" class="form-label">Image de profil</label>
@@ -54,7 +54,7 @@ export default {
         this.errorMessage += "- vous n'avez pas renseigné votre nom d'utilisateur.\n";
         return false;
       }
-      else if (!(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/.test(this.username))) {// Mettre le regex à l'intérieur de /^ +$/
+      else if (!(/^(?=[A-Za-zÀ-ÖØ-öø-ÿ0-9\s-]{8,30}$)(?!.*[_.]{2})[^_.].*[^_.]$/.test(this.username))) {// Mettre le regex à l'intérieur de /^ +$/
         this.errorMessage += "- vous avez un caractère invalide dans votre nom d'utilisateur.\n";
         return false;
       }

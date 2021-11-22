@@ -18,7 +18,7 @@ passwordSchema
 module.exports = (req, res, next) => {
   let hasError = false;
   const errors = [];
-  const regex = /^(?=[a-zA-Z0-9._ ]{8,30}$)(?!.*[_.]{2})[^_.].*[^_.]$/; // Accepts lowercase, uppercase, digits, from 5 to 30
+  const regex = /^(?=[A-Za-zÀ-ÖØ-öø-ÿ0-9\s-]{8,30}$)(?!.*[_.]{2})[^_.].*[^_.]$/; // Accepts lowercase, uppercase, digits, from 5 to 30
   if(req.file) {
     const userData = JSON.parse(req.body.user);
     if(regex.test(userData.username) == false){
